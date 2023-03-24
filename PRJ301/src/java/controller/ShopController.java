@@ -74,6 +74,7 @@ public class ShopController extends HttpServlet {
     private void shop(HttpServletRequest request, HttpServletResponse response, ProductDAO dao)
             throws SQLException, ServletException, IOException {
         int pageNum = request.getParameter("page") == null ? 1 : Integer.parseInt(request.getParameter("page"));
+        
         String name = request.getParameter("name") == null ? "" : request.getParameter("name");
         String nameList[] = name.split(" của hãng ", 2);
         String brand = "", type = "";

@@ -22,7 +22,7 @@ import utils.DBUtils;
 public class ProductDAO {
     private static final String LOWER = "update BabyStore.dbo.Product set stock = ? where ProID = ?";
 
-    private static final String SELECT = "select * from Product where ProBrand like ? and ProType like ? and Price <= ? and Stock > 0 and Sale >= ? and Size like ? and Color like ?";
+    private static final String SELECT = "select * from Product where (ProBrand like ? or ProType like ?) and Price <= ? and Stock > 0 and Sale >= ? and Size like ? and Color like ?";
     private static final String CREATE = "insert into BabyStore.dbo.Product values(?, ?, ?, ?, ?, ?, ? ,? ,?)";
     private static final String READ = "select * from BabyStore.dbo.Product where ProID = ?";
     private static final String DELETE = "update BabyStore.dbo.Product set stock = 0 where ProId = ?";
