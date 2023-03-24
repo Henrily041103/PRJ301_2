@@ -49,7 +49,7 @@ The when condition does not display a link for the current page--%>
 
 
 <nav aria-label="pageNav" >
-    <ul class="pagination" style="margin-left:">
+    <ul class="pagination" style="">
         <c:if test="${pageNum != 1}">
 
             <li class="page-item"><a class="page-link" style="font-weight: 600; color: black" href="shop.do?page=${pageNum - 1}">Previous</a></li>
