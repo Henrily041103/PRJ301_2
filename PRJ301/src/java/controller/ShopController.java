@@ -53,12 +53,12 @@ public class ShopController extends HttpServlet {
                     shop(request, response, dao);
                     break;
                 case "product":
-                    product(request, dao);
+                    product(request, response, dao);
                     break;
                 case "revenue":
                     revenue(request, response, dao);
                     break;
-                case "revenue":
+                case "revenue-handler":
                     request.getRequestDispatcher(MAIN).forward(request, response);
             }
         } catch (SQLException ex) {

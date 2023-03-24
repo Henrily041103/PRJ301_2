@@ -26,7 +26,8 @@
             <div class="row header">
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
                     <div class="container-fluid">
-                        <a class="navbar-brand" href="<c:url value="/shop/shop.do"/>" style="font-weight:bolder; font-size: 50px">Baby shop</a>
+                        <a class="navbar-brand" href="<c:url value="/shop/shop.do"/>" style="font-weight:bolder; font-size: 50px">
+                            <img src="<c:url value="/images/logo.png"/>"/></a>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             
                             <c:if test="${current_user==null}"> 
