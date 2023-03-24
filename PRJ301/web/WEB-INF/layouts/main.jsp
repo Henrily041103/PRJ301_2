@@ -23,93 +23,71 @@
     <body>
         <div class="container">
             <!--header-->
-
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="shop.do" style="font-weight:bold; font-size: 40px">
-                        <img src="<c:url value="/images/logo.png" />" />
-                    </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="shop.do">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="<c:url value="/login/login.do"/>">Login</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Dropdown
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                        <form class="d-flex">
-                            <input class="form-control me-2" type="text" name="search" id="search" placeholder="Search a product">
-                            <button class="btn btn-outline-success" type="submit">Search</button>
-                        </form>
-                    </div>
-                </div>
-            </nav>
-
             <div class="row header">
-                <c:if test="${current_user!=null}">
-                    <div class="row">
-                        <div class="col-2" id="logo">
-                            Baby Shop
-                        </div>
-                        <div class="col-6" id="search-bar">
-                            <form action="<c:url value="/shop/search.do"/>">
-                                <input type="text" name="search" id="search" placeholder="Search a product">
-                                <button type="submit" id="search-icon">
-                                    <i class="bi bi-search"></i>
-                                </button>
-                            </form>
-                        </div>
-                        <div class="col-2" id="cart">
-                            <c:choose>
-                                <c:when test="${cart==null || cart.size==0}">
-                                    <a href="<c:url value="/cart/show.do"/>">
-                                        <i class="bi bi-cart">Cart</i>
-                                    </a>
-                                </c:when>
-                                <c:when test="${cart!=null && cart.size>0}">
-                                    <a href="<c:url value="/cart/show.do"/>">
-                                        <i class="bi bi-cart-fill">Cart</i>
-                                        <div id="cart-size">${cart.size}</div>
-                                    </a>
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" href="<c:url value="/shop/shop.do"/>" style="font-weight:bolder; font-size: 50px">Baby shop</a>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            
+                            <c:if test="${current_user==null}"> 
+                                <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="font-size: 25px; margin-left: 5px">
+                                    <li class="home">
+                                        <a class="nav-link active" href="<c:url value="/shop/shop.do"/>">Home</a>
+                                    </li>
+                                    <li class="login">
+                                        <a class="nav-link active" style="color:blue" href="<c:url value="/login/login.do"/>">Login</a>
+                                    </li>
+                                </ul>
+                            </c:if >
+                            
+                            <c:if test="${current_user!=null && current_user.role=='us'}">
+                                <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="font-size: 20px">
+                                    <li class="home">
+                                        <a class="nav-link active" href="<c:url value="/shop/shop.do"/>">Home</a>
+                                    </li>
+                                    <li class="logout">
+                                        <a class="nav-link active" href="<c:url value="/login/logout.do"/>">Logout</a>
+                                    </li>
+                                    <c:choose>
+                                        <c:when test="${cart==null || cart.size==0}">
+                                            <li class="cart">
+                                                <a class="nav-link active" href="<c:url value="/cart/show.do"/>">Cart</a>
+                                            </li>
+                                        </c:when>
+                                        <c:when test="${cart!=null && cart.size>0}">
+                                            <li class="cart">
+                                                <a class="nav-link active" style="color:red" href="<c:url value="/cart/show.do"/>">Cart</a>
+                                            </li>
+                                        </c:when>
+                                    </c:choose>
+                                </ul>
+                                <form class="d-flex">
+                                    <input class="form-control me-2" type="text" name="search" id="search" placeholder="Search a product">
+                                    <button class="btn btn-outline-success" type="submit">Search</button>
+                                </form>
+                            </c:if >
+                            
+                            <c:if test="${current_user!= null && current_user.role=='ad'}">
+                                <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="font-size: 20px">
+                                    <li class="home">
+                                        <a class="nav-link active" href="<c:url value="/shop/shop.do"/>">Home</a>
+                                    </li>
+                                    <li class="revenue">
+                                        <a class="nav-link active" href="<c:url value="/shop/revenue.do"/>">Revenue</a>
+                                    </li>
+                                    <li class="logout">
+                                        <a class="nav-link active" href="<c:url value="/login/logout.do"/>">Logout</a>
+                                    </li>                                    
+                                </ul>
+                                <form class="d-flex">
+                                    <input class="form-control me-2" type="text" name="search" id="search" placeholder="Search a product">
+                                    <button class="btn btn-outline-success" type="submit">Search</button>
+                                </form>
+                            </c:if >
 
-                                </c:when>
-                            </c:choose>
-                        </div>
-                        <div class="col-2" id="account-info">
-                            <div id="account-name">Current user: ${current_user.username}</div>
-
-                            <div id="account-logout">
-                                <a class="btn btn-danger" href="<c:url value="/login/logout.do"/>" id="logout">Log out</a>
-                            </div>
                         </div>
                     </div>
-                </c:if >
-
-                <c:if test="${current_user==null}">
-                    <div class="row">
-                        <div id="logo-alone">
-                            Baby Shop
-                        </div>
-                        <span id="account-login">
-                            <a href="<c:url value="/login/login.do"/>" class="btn btn-primary btn-block"> <i class="fas fa-user-plus"></i>Login</a>
-                        </span>
-                    </div>
-                </c:if>
+                </nav>
             </div>
             <!--view-->
             <div class="row content">
@@ -121,7 +99,7 @@
             <!--footer-->
             <div class="row footer">
                 <div class="col">
-                    Copyright &copy; by FPT Students
+                    Copyright &copy; by Nhóm 五
                 </div>
             </div>            
         </div>

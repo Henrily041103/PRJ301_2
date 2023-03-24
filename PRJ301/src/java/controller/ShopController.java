@@ -55,8 +55,8 @@ public class ShopController extends HttpServlet {
                 case "product":
                     product(request, dao);
                     break;
-                case "revenue-handler":
-                    revenue(request, dao);
+                case "revenue":
+                    revenue(request, response, dao);
                     break;
                 case "revenue":
                     request.getRequestDispatcher(MAIN).forward(request, response);
@@ -116,8 +116,8 @@ public class ShopController extends HttpServlet {
         }
     }
 
-    private void revenue(HttpServletRequest request, ProductDAO dao) throws SQLException {
-        
+    private void revenue(HttpServletRequest request, HttpServletResponse response, ProductDAO dao) throws SQLException, ServletException, IOException {
+        request.getRequestDispatcher(MAIN).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
