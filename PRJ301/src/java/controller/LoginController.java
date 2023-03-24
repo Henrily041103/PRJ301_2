@@ -42,6 +42,7 @@ public class LoginController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        String controller = (String) request.getAttribute("action");
         String action = (String) request.getAttribute("action");
         AccountDAO dao = new AccountDAO();
         HttpSession session = request.getSession();
@@ -91,15 +92,15 @@ public class LoginController extends HttpServlet {
         AccountDTO account = dao.login(username, password);
 
         if (account != null) {
-            request.setAttribute("controller", SHOP_CONTROLLER);
-            request.setAttribute("action", SHOP);
+//            request.setAttribute("controller", SHOP_CONTROLLER);
+//            request.setAttribute("action", SHOP);
             session.setAttribute("current_user", account);
-            request.getRequestDispatcher(SHOP_CONTROLLER).forward(request, response);
+            response.sendRedirect(SHOP_CONTROLLER + "/" + SHOP + ".do");
         } else {
             request.setAttribute("controller", LOGIN_CONTROLLER);
             request.setAttribute("action", LOGIN);
             request.setAttribute("error_message", "Wrong username or password!");
-            request.getRequestDispatcher(LOGIN_CONTROLLER).forward(request, response);
+            response.sendRedirect(LOGIN_CONTROLLER + "/" + LOGIN + ".do");
         }
 
     }

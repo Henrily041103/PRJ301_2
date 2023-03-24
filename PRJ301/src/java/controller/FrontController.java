@@ -25,9 +25,9 @@ public class FrontController extends HttpServlet {
         String controller=getController(url);
         String action=getAction(url);
         
-//        System.out.println("ServletPath: "+url);
-//        System.out.println("Controller: "+controller);
-//        System.out.println("Action: "+action);
+        System.out.println("ServletPath: "+url);
+        System.out.println("Controller: "+controller);
+        System.out.println("Action: "+action);
 
         request.setAttribute("controller", controller);
         request.setAttribute("action", action);
@@ -37,7 +37,7 @@ public class FrontController extends HttpServlet {
         request.getRequestDispatcher(controller).forward(request, response);
     }
     private String getController(String url) {
-        return url.substring(0, url.lastIndexOf("/"));
+        return url.substring(StringUtil.nthLastIndexOf(2, "/", url), url.lastIndexOf("/"));
     }
 
     private String getAction(String url) {
