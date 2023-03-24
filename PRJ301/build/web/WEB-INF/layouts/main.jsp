@@ -17,8 +17,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 
-        <link href="<c:url value="/WEB-INF/css/style.css" />" rel="stylesheet" type="text/css"/>
-        <style> <%@ include file="/WEB-INF/css/style.css"%> </style>
+<!--<link href="<c:url value="/css/site.css" />" rel="stylesheet" type="text/css"/>-->
     </head>
     <body>
         <div class="container">
@@ -66,7 +65,7 @@
 
                 <c:if test="${current_user==null}">
                     <div class="row">
-                        <div id="logo-alone">
+                        <div id="col-2 logo-alone">
                             Baby Shop
                         </div>
                         <span id="col-8 account-login">
@@ -81,7 +80,7 @@
                     <jsp:include page="/WEB-INF/views/${controller}/${action}.jsp" />
                 </div>
             </div>
-            <c:if test="${error_message!=null}"><div class="alert alert-warning">${error_message}</div></c:if>
+                    <c:if test="${error_message!=null}"><div class="alert alert-warning">${error_message}</div></c:if>
             <!--footer-->
             <div class="row footer">
                 <div class="col">
