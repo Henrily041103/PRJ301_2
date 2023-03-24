@@ -51,6 +51,7 @@
                                         <i class="bi bi-cart-fill"></i>
                                         <div id="cart-size">${cart.size}</div>
                                     </a>
+                                    
                                 </c:when>
                             </c:choose>
                         </div>
