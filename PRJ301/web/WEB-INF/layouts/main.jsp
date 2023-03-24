@@ -26,7 +26,9 @@
 
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="shop.do" style="font-weight:bold; font-size: 40px">Baby shop</a>
+                    <a class="navbar-brand" href="shop.do" style="font-weight:bold; font-size: 40px">
+                        <img src="<c:url value="/images/logo.png" />" />
+                    </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>

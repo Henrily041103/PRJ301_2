@@ -9,7 +9,7 @@
         <c:forEach var="product" items="${list}" varStatus="loop">
             <div class="col-md-3 my-3">
                 <div class="container w-100" style="width: 50rem;">  
-                    <img class="card-img-top" src="<c:url value="https://www.cultofpedagogy.com/wp-content/uploads/2020/03/IDK-Featured.png" />" />
+                    <img class="card-img-top" src="<c:url value="/images/${product.image}" />" />
                     <div class="card-body">
                         <h5 class="card-title">${product.name}</h5>
                         <h6 style="margin-top:5px" class="id">Id: ${product.proID}</h6>

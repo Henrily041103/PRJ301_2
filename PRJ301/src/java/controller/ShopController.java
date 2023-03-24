@@ -55,9 +55,11 @@ public class ShopController extends HttpServlet {
                 case "product":
                     product(request, dao);
                     break;
-                case "revenue":
+                case "revenue-handler":
                     revenue(request, dao);
                     break;
+                case "revenue":
+                    request.getRequestDispatcher(MAIN).forward(request, response);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -103,12 +105,19 @@ public class ShopController extends HttpServlet {
         request.getRequestDispatcher(MAIN).forward(request, response);
     }
 
-    private void product(HttpServletRequest request, ProductDAO dao) throws SQLException {
-
+    private void product(HttpServletRequest request, HttpServletResponse response, ProductDAO dao) 
+            throws SQLException, ServletException, IOException {
+        String id = request.getParameter("id");
+        
+        ProductDTO product = dao.read(id);
+        
+        if (product==null) {
+            response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
+        }
     }
 
     private void revenue(HttpServletRequest request, ProductDAO dao) throws SQLException {
-
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -7,7 +7,6 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Files;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Admin
  */
 public class ImageController extends HttpServlet {
-    private static final String PATH = "../productPics/";
+    private static final String PATH = "D:\\work\\FPT\\2023_HK1\\PRJ301\\PRJ301_2\\PRJ301\\resources";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -33,11 +32,11 @@ public class ImageController extends HttpServlet {
             throws ServletException, IOException {
         String filename = request.getPathInfo().substring(1);
         File file = new File(PATH,filename);
+//        System.out.println(file.getAbsolutePath());
         response.setHeader("Content-Type", getServletContext().getMimeType(filename));
         response.setHeader("Content-Length",String.valueOf(file.length()));
         response.setHeader("Content-Disposition","inline; filename=\""+filename +"\"");
         Files.copy(file.toPath(),response.getOutputStream());
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
