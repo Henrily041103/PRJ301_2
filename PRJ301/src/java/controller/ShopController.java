@@ -7,6 +7,7 @@ package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.ProductDAO;
+import model.ProductDTO;
 
 /**
  *
@@ -46,7 +48,7 @@ public class ShopController extends HttpServlet {
         try {
             switch (action) {
                 case "shop":
-                    shop(request, dao);
+                    shop(request, response, dao);
                     break;
                 case "product":
                     product(request, dao);
@@ -58,12 +60,37 @@ public class ShopController extends HttpServlet {
         } catch (SQLException ex) {
             ex.printStackTrace();
             request.setAttribute("error_message", "Something is wrong.");
-        } finally {
+            request.setAttribute("controller", SHOP_CONTROLLER);
+            request.setAttribute("action", SHOP);
             request.getRequestDispatcher(MAIN).forward(request, response);
+        } catch (ServletException | IOException ex) {
+            ex.printStackTrace();
+            throw ex;
         }
     }
     
-    private void shop(HttpServletRequest request, ProductDAO dao) throws SQLException {
+    private void shop(HttpServletRequest request, HttpServletResponse response, ProductDAO dao) 
+            throws SQLException, ServletException, IOException {
+        int pageNum = request.getParameter("page")==null? 1 : Integer.parseInt(request.getParameter("page"));
+        String name = request.getParameter("name")==null? "": request.getParameter("name");
+        String nameList[] = name.split(" của hãng ", 2);
+        String brand = "", type = "";
+        if (nameList.length == 2) {
+            type = nameList[0];
+            brand = nameList[1];
+        }
+        String size = request.getParameter("size")==null? "": request.getParameter("size");
+        String color = request.getParameter("color")==null? "": request.getParameter("color");
+        String max = request.getParameter("max")==null? "12": request.getParameter("max");
+        String min = request.getParameter("min")==null? "0": request.getParameter("min");
+        double price = request.getParameter("price")==null? 10000 : Double.parseDouble(request.getParameter("price"));
+        double sale = request.getParameter("sale")==null? 0 : Double.parseDouble(request.getParameter("sale"));
+        
+        ProductDTO selector = new ProductDTO("", brand, type, price, sale, 0, "", size, color);
+        
+        List<ProductDTO> list = dao.select(selector, max, min);
+        request.setAttribute("list", list);
+        request.getRequestDispatcher(MAIN).forward(request, response);
     }
     
     private void product(HttpServletRequest request, ProductDAO dao) throws SQLException {

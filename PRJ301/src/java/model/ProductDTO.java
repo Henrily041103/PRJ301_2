@@ -115,7 +115,7 @@ public class ProductDTO {
     }
     
     public String getName() {
-        return proType + " " + proBrand;
+        return proType + " của hãng " + proBrand;
     }
 
     @Override
@@ -125,20 +125,18 @@ public class ProductDTO {
     
     public String getDisplay() {
         switch (ageGroup) {
-            case "1":
-                return "0 3";
             case "2":
-                return "3 6";
+                return "3-6";
             case "3":
-                return "6 9";
+                return "6-9";
             case "4":
-                return "9 12";
+                return "9-12";
             default:
-                return "0 3";
+                return "0-3";
         }
     }
     
-    public static String toData(String max, String min) {
+    public String toData(String max, String min) {
         int maxNum = Integer.parseInt(max);
         int minNum = Integer.parseInt(min);
         List<String> rangeList = new ArrayList();

@@ -48,14 +48,18 @@ public class LoginController extends HttpServlet {
 
         try {
             switch (action) {
+                case "login":
+                case "register":
+                    request.getRequestDispatcher(MAIN).forward(request, response);
+                    break;
                 case "login-handler":
-                    login(request, session, dao);
+                    login(request, response, session, dao);
                     break;
                 case "register-handler":
-                    register(request, session, dao);
+                    register(request, response, session, dao);
                     break;
                 case "logout":
-                    logout(request, session);
+                    logout(request, response, session);
                     break;
             }
         } catch (SQLException ex) {
@@ -63,19 +67,23 @@ public class LoginController extends HttpServlet {
             request.setAttribute("error_message", "Something is wrong with the database.");
             request.setAttribute("controller", LOGIN_CONTROLLER);
             request.setAttribute("action", LOGIN);
-        } finally {
             request.getRequestDispatcher(MAIN).forward(request, response);
+        } catch (ServletException | IOException ex) {
+            ex.printStackTrace();
+            throw ex;
         }
     }
 
-    private void logout(HttpServletRequest request, HttpSession session) throws SQLException {
+    private void logout(HttpServletRequest request, HttpServletResponse response, HttpSession session)
+            throws SQLException, ServletException, IOException {
         session.invalidate();
         request.setAttribute("controller", LOGIN_CONTROLLER);
         request.setAttribute("action", LOGIN);
+        request.getRequestDispatcher(LOGIN_CONTROLLER).forward(request, response);
     }
 
-    private void login(HttpServletRequest request, HttpSession session, AccountDAO dao)
-            throws SQLException {
+    private void login(HttpServletRequest request, HttpServletResponse response, HttpSession session, AccountDAO dao)
+            throws SQLException, ServletException, IOException {
         String username = request.getParameter("user");
         String password = request.getParameter("pass");
 
@@ -83,27 +91,25 @@ public class LoginController extends HttpServlet {
         AccountDTO account = dao.login(username, password);
 
         if (account != null) {
-            session.setAttribute("current_user", account);
             request.setAttribute("controller", SHOP_CONTROLLER);
             request.setAttribute("action", SHOP);
+            session.setAttribute("current_user", account);
+            request.getRequestDispatcher(SHOP_CONTROLLER).forward(request, response);
         } else {
             request.setAttribute("controller", LOGIN_CONTROLLER);
             request.setAttribute("action", LOGIN);
             request.setAttribute("error_message", "Wrong username or password!");
+            request.getRequestDispatcher(LOGIN_CONTROLLER).forward(request, response);
         }
 
     }
 
-    private void register(HttpServletRequest request, HttpSession session, AccountDAO dao)
-            throws SQLException {
+    private void register(HttpServletRequest request, HttpServletResponse response, HttpSession session, AccountDAO dao)
+            throws SQLException, ServletException, IOException {
         String username = request.getParameter("user");
         String password = request.getParameter("pass");
         String repass = request.getParameter("repass");
         String email = request.getParameter("email");
-//        System.out.println(username);
-//        System.out.println(password);
-//        System.out.println(repass);
-//        System.out.println(email);
         //TODO: check validity of password
         if (repass.equals(password)) {
             AccountDTO account = dao.register(username, password, email);
@@ -111,19 +117,19 @@ public class LoginController extends HttpServlet {
                 session.setAttribute("current_user", account);
                 request.setAttribute("controller", SHOP_CONTROLLER);
                 request.setAttribute("action", SHOP);
-//                System.out.println("Action: "+SHOP);
+                request.getRequestDispatcher(SHOP_CONTROLLER).forward(request, response);
             } else {
                 request.setAttribute("controller", LOGIN_CONTROLLER);
                 request.setAttribute("action", REGISTER);
                 request.setAttribute("error_message", "An account with this email already exist.");
-//                System.out.println("Action: "+REGISTER);
+                request.getRequestDispatcher(LOGIN_CONTROLLER).forward(request, response);
             }
         } else {
             System.out.println("b");
             request.setAttribute("controller", LOGIN_CONTROLLER);
-            request.setAttribute("action", LOGIN);
+            request.setAttribute("action", REGISTER);
             request.setAttribute("error_message", "Passwords don't match.");
-//            System.out.println("Action: "+LOGIN);
+            request.getRequestDispatcher(LOGIN_CONTROLLER).forward(request, response);
         }
     }
 

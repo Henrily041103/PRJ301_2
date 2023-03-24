@@ -28,9 +28,9 @@
                 <c:if test="${current_user!= null && current_user.role=='ad'}">
                     <a href='<c:url value='/shop/product.do?id=${product.proID}'/>' class='btn btn-primary btn-block'>Edit</a>
                 </c:if>
-                <c:otherwise>
-                    <a href='<c:url value='/shop/product.do?id=${product.proID}'/>' class='btn btn-primary btn-block'>View</a>
-                </c:otherwise>
+                <c:if test="${current_user== null || current_user.role!='ad'}">
+                    <a href='<c:url value='/shop/product.do?id=${product.proID}'/>' class='btn btn-primary btn-block'>View more</a>
+                </c:if>
             </td>
             
         </tr>
