@@ -4,4 +4,4 @@
     Author     : Admin
 --%>
 
-<jsp:forward page="/login/login.do"/>
+<jsp:forward page="/shop/shop.do"/>
