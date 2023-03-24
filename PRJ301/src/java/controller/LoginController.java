@@ -78,9 +78,7 @@ public class LoginController extends HttpServlet {
     private void logout(HttpServletRequest request, HttpServletResponse response, HttpSession session)
             throws SQLException, ServletException, IOException {
         session.invalidate();
-        request.setAttribute("controller", LOGIN_CONTROLLER);
-        request.setAttribute("action", LOGIN);
-        request.getRequestDispatcher(LOGIN_CONTROLLER).forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
     }
 
     private void login(HttpServletRequest request, HttpServletResponse response, HttpSession session, AccountDAO dao)
@@ -95,12 +93,10 @@ public class LoginController extends HttpServlet {
 //            request.setAttribute("controller", SHOP_CONTROLLER);
 //            request.setAttribute("action", SHOP);
             session.setAttribute("current_user", account);
-            response.sendRedirect(SHOP_CONTROLLER + "/" + SHOP + ".do");
+            response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
         } else {
-            request.setAttribute("controller", LOGIN_CONTROLLER);
-            request.setAttribute("action", LOGIN);
             request.setAttribute("error_message", "Wrong username or password!");
-            response.sendRedirect(LOGIN_CONTROLLER + "/" + LOGIN + ".do");
+            response.sendRedirect(request.getContextPath() + "/" + LOGIN_CONTROLLER + "/" + LOGIN + ".do");
         }
 
     }
@@ -116,21 +112,14 @@ public class LoginController extends HttpServlet {
             AccountDTO account = dao.register(username, password, email);
             if (account != null) {
                 session.setAttribute("current_user", account);
-                request.setAttribute("controller", SHOP_CONTROLLER);
-                request.setAttribute("action", SHOP);
-                request.getRequestDispatcher(SHOP_CONTROLLER).forward(request, response);
+                response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
             } else {
-                request.setAttribute("controller", LOGIN_CONTROLLER);
-                request.setAttribute("action", REGISTER);
                 request.setAttribute("error_message", "An account with this email already exist.");
-                request.getRequestDispatcher(LOGIN_CONTROLLER).forward(request, response);
+                response.sendRedirect(request.getContextPath() + "/" + LOGIN_CONTROLLER + "/" + REGISTER + ".do");
             }
         } else {
-            System.out.println("b");
-            request.setAttribute("controller", LOGIN_CONTROLLER);
-            request.setAttribute("action", REGISTER);
             request.setAttribute("error_message", "Passwords don't match.");
-            request.getRequestDispatcher(LOGIN_CONTROLLER).forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/" + LOGIN_CONTROLLER + "/" + REGISTER + ".do");
         }
     }
 
