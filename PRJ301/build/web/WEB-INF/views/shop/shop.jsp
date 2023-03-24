@@ -4,7 +4,6 @@
     Author     : Admin
 --%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <div class="container">
     <div class="row">
         <c:forEach var="product" items="${list}" varStatus="loop">
@@ -19,14 +18,14 @@
                         <c:if test="${product.size==' '}"></br></c:if>
                         <c:if test="${product.color!=' '}"><h6 style="margin-top:5px" class="id">Color ${product.color}</h6></c:if>
                         <c:if test="${product.color==' '}"></br></c:if>
-                        
+                        <h6 style="margin-top:5px" class="id">Size: ${product.size}</h6>
+                        <h6 style="margin-top:5px" class="price">Color ${product.color}</h6>
                         <div class="mt-3 d-flex justify-content-between">    
                             <c:if test="${current_user!= null && current_user.role=='ad'}">
                                 <a href='<c:url value='/shop/product.do?id=${product.proID}'/>' class='btn btn-outline-dark'>Edit</a>
                             </c:if>
                             <c:if test="${current_user== null || current_user.role!='ad'}">
                                 <a href='<c:url value='/shop/product.do?id=${product.proID}'/>' class='btn btn-outline-primary'>View more</a>
-                                
                             </c:if>
                         </div>
                     </div>
