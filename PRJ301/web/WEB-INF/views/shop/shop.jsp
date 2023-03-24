@@ -4,35 +4,30 @@
     Author     : Admin
 --%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<table class="table table-striped">
-    <tr>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Sale</th>
-        <th>Stock</th>
-        <th>Age Group</th>
-        <th>Size</th>
-        <th>Color</th>
-        <th>Operation</th>
-    </tr>
-    <c:forEach var="product" items="${list}">
-        <tr>
-            <td>${product.name}</td>
-            <td>${product.price}</td>
-            <td>${product.sale}</td>
-            <td>${product.stock}</td>
-            <td>${product.ageGroup}</td>
-            <td>${product.size}</td>
-            <td>${product.color}</td>
-            <td>
-                <c:if test="${current_user!= null && current_user.role=='ad'}">
-                    <a href='<c:url value='/shop/product.do?id=${product.proID}'/>' class='btn btn-primary btn-block'>Edit</a>
-                </c:if>
-                <c:if test="${current_user== null || current_user.role!='ad'}">
-                    <a href='<c:url value='/shop/product.do?id=${product.proID}'/>' class='btn btn-primary btn-block'>View more</a>
-                </c:if>
-            </td>
-            
-        </tr>
-    </c:forEach>
-</table>
+
+<div class="container">
+    <div class="row">
+        <c:forEach var="product" items="${list}" varStatus="loop">
+            <div class="col-md-3 my-3">
+                <div class="container w-100" style="width: 50rem;">  
+                    <img class="card-img-top" src="<c:url value="https://www.cultofpedagogy.com/wp-content/uploads/2020/03/IDK-Featured.png" />" />
+                    <div class="card-body">
+                        <h5 class="card-title">${product.name}</h5>
+                        <h6 style="margin-top:5px" class="id">Id: ${product.proID}</h6>
+                        <h6 style="margin-top:5px" class="id">Price: $${product.price}</h6>
+                        <h6 style="margin-top:5px" class="id">Size: ${product.size}</h6>
+                        <h6 style="margin-top:5px" class="price">Color ${product.color}</h6>
+                        <div class="mt-3 d-flex justify-content-between">    
+                            <c:if test="${current_user!= null && current_user.role=='ad'}">
+                                <a href='<c:url value='/shop/product.do?id=${product.proID}'/>' class='btn btn-outline-dark'>Edit</a>
+                            </c:if>
+                            <c:if test="${current_user== null || current_user.role!='ad'}">
+                                <a href='<c:url value='/shop/product.do?id=${product.proID}'/>' class='btn btn-outline-primary'>View more</a>
+                            </c:if>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </c:forEach>
+    </div>
+</div>
