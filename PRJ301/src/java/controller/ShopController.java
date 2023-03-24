@@ -23,12 +23,14 @@ import model.ProductDTO;
  */
 @WebServlet(name = "ShopController", urlPatterns = {"/shop"})
 public class ShopController extends HttpServlet {
+
     private static final String MAIN = "/WEB-INF/layouts/main.jsp";
     private static final String SHOP_CONTROLLER = "shop";
     private static final String SHOP = "shop";
     private static final String LOGIN_CONTROLLER = "login";
     private static final String LOGIN = "login";
     private static final String REGISTER = "register";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -68,37 +70,44 @@ public class ShopController extends HttpServlet {
             throw ex;
         }
     }
-    
-    private void shop(HttpServletRequest request, HttpServletResponse response, ProductDAO dao) 
+
+    private void shop(HttpServletRequest request, HttpServletResponse response, ProductDAO dao)
             throws SQLException, ServletException, IOException {
-        int pageNum = request.getParameter("page")==null? 1 : Integer.parseInt(request.getParameter("page"));
-        String name = request.getParameter("name")==null? "": request.getParameter("name");
+        int pageNum = request.getParameter("page") == null ? 1 : Integer.parseInt(request.getParameter("page"));
+        String name = request.getParameter("name") == null ? "" : request.getParameter("name");
         String nameList[] = name.split(" của hãng ", 2);
         String brand = "", type = "";
         if (nameList.length == 2) {
             type = nameList[0];
             brand = nameList[1];
         }
-        String size = request.getParameter("size")==null? "": request.getParameter("size");
-        String color = request.getParameter("color")==null? "": request.getParameter("color");
-        String max = request.getParameter("max")==null? "12": request.getParameter("max");
-        String min = request.getParameter("min")==null? "0": request.getParameter("min");
-        double price = request.getParameter("price")==null? 10000 : Double.parseDouble(request.getParameter("price"));
-        double sale = request.getParameter("sale")==null? 0 : Double.parseDouble(request.getParameter("sale"));
-        
+        String size = request.getParameter("size") == null ? "" : request.getParameter("size");
+        String color = request.getParameter("color") == null ? "" : request.getParameter("color");
+        String max = request.getParameter("max") == null ? "12" : request.getParameter("max");
+        String min = request.getParameter("min") == null ? "0" : request.getParameter("min");
+        double price = request.getParameter("price") == null ? 10000 : Double.parseDouble(request.getParameter("price"));
+        double sale = request.getParameter("sale") == null ? 0 : Double.parseDouble(request.getParameter("sale"));
+
         ProductDTO selector = new ProductDTO("", brand, type, price, sale, 0, "", size, color);
+
+        List<ProductDTO> list1 = dao.select(selector, max, min);
+        int numOfPage = (int)Math.ceil(list1.size()/8.0);
+        int start = (pageNum - 1) * 8 < list1.size() - 1 ? (pageNum - 1) * 8 : list1.size() - 1;
+        int stop = pageNum * 8 < list1.size() - 1 ? pageNum * 8 : list1.size() - 1;
+        List<ProductDTO> list = list1.subList(start, stop);
         
-        List<ProductDTO> list = dao.select(selector, max, min);
+        request.setAttribute("numOfPage", numOfPage);
+        request.setAttribute("currentPage", pageNum);
         request.setAttribute("list", list);
         request.getRequestDispatcher(MAIN).forward(request, response);
     }
-    
+
     private void product(HttpServletRequest request, ProductDAO dao) throws SQLException {
-        
+
     }
-    
+
     private void revenue(HttpServletRequest request, ProductDAO dao) throws SQLException {
-        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -114,6 +123,7 @@ public class ShopController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+
     }
 
     /**

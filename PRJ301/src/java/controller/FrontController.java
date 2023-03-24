@@ -37,7 +37,7 @@ public class FrontController extends HttpServlet {
         request.getRequestDispatcher(controller).forward(request, response);
     }
     private String getController(String url) {
-        return url.substring(StringUtil.nthLastIndexOf(2, "/", url), url.lastIndexOf("/"));
+        return url.substring(0, url.lastIndexOf("/"));
     }
 
     private String getAction(String url) {

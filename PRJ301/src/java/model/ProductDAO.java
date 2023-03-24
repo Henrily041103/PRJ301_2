@@ -28,9 +28,7 @@ public class ProductDAO {
     private static final String DELETE = "update BabyStore.dbo.Product set stock = 0 where ProId = ?";
     private static final String UPDATE = "update BabyStore.dbo.Product set ProBrand = ?, ProType = ?, price = ?, sale = ?, stock = ?, ageGroup = ?, size = ?, color = ? where ProID = ?";
     
-    public List<ProductDTO> select
-        (ProductDTO selector, String max, String min) 
-                throws SQLException {
+    public List<ProductDTO> select (ProductDTO selector, String max, String min) throws SQLException {
         List<ProductDTO> list;
         Connection con = DBUtils.getConnection();
         PreparedStatement stm = con.prepareStatement(SELECT + " and AgeGroup in" + selector.toData(max, min));
