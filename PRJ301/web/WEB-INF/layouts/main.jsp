@@ -26,17 +26,17 @@
 
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="shop/shop.do">Baby shop</a>
+                    <a class="navbar-brand" href="shop.do" style="font-weight:bold; font-size: 40px">Baby shop</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                                <a class="nav-link active" aria-current="page" href="shop.do">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Link</a>
+                                <a class="nav-link" href="<c:url value="/login/login.do"/>">Login</a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -51,7 +51,7 @@
                             </li>
                         </ul>
                         <form class="d-flex">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <input class="form-control me-2" type="text" name="search" id="search" placeholder="Search a product">
                             <button class="btn btn-outline-success" type="submit">Search</button>
                         </form>
                     </div>
@@ -69,8 +69,6 @@
                                 <input type="text" name="search" id="search" placeholder="Search a product">
                                 <button type="submit" id="search-icon">
                                     <i class="bi bi-search"></i>
-
-                                    </i>
                                 </button>
                             </form>
                         </div>
@@ -78,12 +76,12 @@
                             <c:choose>
                                 <c:when test="${cart==null || cart.size==0}">
                                     <a href="<c:url value="/cart/show.do"/>">
-                                        <i class="bi bi-cart"></i>
+                                        <i class="bi bi-cart">Cart</i>
                                     </a>
                                 </c:when>
                                 <c:when test="${cart!=null && cart.size>0}">
                                     <a href="<c:url value="/cart/show.do"/>">
-                                        <i class="bi bi-cart-fill"></i>
+                                        <i class="bi bi-cart-fill">Cart</i>
                                         <div id="cart-size">${cart.size}</div>
                                     </a>
 
