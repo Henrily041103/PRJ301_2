@@ -5,43 +5,39 @@
  */
 package controller;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import utils.StringUtil;
 
 /**
  *
- * @author Thanh
+ * @author Admin
  */
-public class FrontController extends HttpServlet {
-
+public class ImageController extends HttpServlet {
+    private static final String PATH = "../productPics/";
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        String url=request.getServletPath();
-        String controller=getController(url);
-        String action=getAction(url);
+        String filename = request.getPathInfo().substring(1);
+        File file = new File(PATH,filename);
+        response.setHeader("Content-Type", getServletContext().getMimeType(filename));
+        response.setHeader("Content-Length",String.valueOf(file.length()));
+        response.setHeader("Content-Disposition","inline; filename=\""+filename +"\"");
+        Files.copy(file.toPath(),response.getOutputStream());
         
-        System.out.println("ServletPath: "+url);
-        System.out.println("Controller: "+controller);
-        System.out.println("Action: "+action);
-
-        request.setAttribute("controller", controller);
-        request.setAttribute("action", action);
-        
-        //Chuyen request & response cho controller xu ly tiep
-        
-        request.getRequestDispatcher(controller).forward(request, response);
-    }
-    private String getController(String url) {
-        return url.substring(StringUtil.nthLastIndexOf(2, "/", url), url.lastIndexOf("/"));
-    }
-
-    private String getAction(String url) {
-        return url.substring(url.lastIndexOf("/") + 1, url.lastIndexOf("."));
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
