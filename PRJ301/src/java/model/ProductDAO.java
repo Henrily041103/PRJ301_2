@@ -21,11 +21,11 @@ import utils.DBUtils;
 public class ProductDAO {
     private static final String LOWER = "update BabyStore.dbo.Product set stock = ? where ProID = ?";
 
-    private static final String SELECT = "select * from Product where (ProBrand like ? or ProType like ?) and Price <= ? and Stock > 0 and Sale >= ? and Size like ? and Color like ?";
-    private static final String CREATE = "insert into BabyStore.dbo.Product values(?, ?, ?, ?, ?, ?, ? ,? ,?)";
+    private static final String SELECT = "select * from Product where ProBrand like ? and ProType like ? and Price <= ? and Stock > 0 and Sale >= ? and Size like ? and Color like ? and ProName like ?";
+    private static final String CREATE = "insert into BabyStore.dbo.Product values(?, ?, ?, ?, ?, ?, ? ,? ,?, ?)";
     private static final String READ = "select * from BabyStore.dbo.Product where ProID = ?";
     private static final String DELETE = "update BabyStore.dbo.Product set stock = 0 where ProId = ?";
-    private static final String UPDATE = "update BabyStore.dbo.Product set ProBrand = ?, ProType = ?, price = ?, sale = ?, stock = ?, ageGroup = ?, size = ?, color = ? where ProID = ?";
+    private static final String UPDATE = "update BabyStore.dbo.Product set ProBrand = ?, ProType = ?, price = ?, sale = ?, stock = ?, ageGroup = ?, size = ?, color = ?, ProName = ? where ProID = ?";
     
     public List<ProductDTO> select (ProductDTO selector, String max, String min) throws SQLException {
         List<ProductDTO> list;
@@ -37,6 +37,7 @@ public class ProductDAO {
         stm.setFloat(4, (float)selector.getSale());
         stm.setString(5, "%"+ selector.getSize() +"%");
         stm.setString(6, "%"+ selector.getColor() +"%");
+        stm.setString(7, "%"+ selector.getName()+"%");
         ResultSet rs = stm.executeQuery();
         
         list = null;
@@ -46,6 +47,7 @@ public class ProductDAO {
             }
 
             ProductDTO product = new ProductDTO();
+            product.setName(rs.getString("ProName"));
             product.setProID(rs.getString("ProId"));
             product.setProBrand(rs.getString("ProBrand"));
             product.setProType(rs.getString("ProType"));
@@ -77,6 +79,7 @@ public class ProductDAO {
         stm.setString(7, product.getAgeGroup());
         stm.setString(8, product.getSize());
         stm.setString(9, product.getColor());
+        stm.setString(10, product.getName());
         
         int count = stm.executeUpdate();
 
@@ -93,6 +96,7 @@ public class ProductDAO {
         ResultSet rs = stm.executeQuery();
         
         if (rs.next()) {
+            product = new ProductDTO();
             product.setProID(rs.getString("ProId"));
             product.setProBrand(rs.getString("ProBrand"));
             product.setProType(rs.getString("ProType"));
@@ -102,6 +106,7 @@ public class ProductDAO {
             product.setAgeGroup(rs.getString("ageGroup"));
             product.setSize(rs.getString("size"));
             product.setColor(rs.getString("color"));
+            product.setName(rs.getString("ProName"));
         }
         rs.close();
         stm.close();
@@ -123,7 +128,8 @@ public class ProductDAO {
         stm.setString(6, product.getAgeGroup());
         stm.setString(7, product.getSize());
         stm.setString(8, product.getColor());
-        stm.setString(9, product.getProID());
+        stm.setString(9, product.getName());
+        stm.setString(10, product.getProID());
         //Thực thi lệnh sql
         int count = stm.executeUpdate();
         //Đóng kết nối

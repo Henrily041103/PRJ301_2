@@ -82,12 +82,8 @@ public class ShopController extends HttpServlet {
         int pageNum = request.getParameter("page") == null ? 1 : Integer.parseInt(request.getParameter("page"));
 
         String name = request.getParameter("name") == null ? "" : request.getParameter("name");
-        String nameList[] = name.split(" của hãng ", 2);
-        String brand = "", type = "";
-        if (nameList.length == 2) {
-            type = nameList[0];
-            brand = nameList[1];
-        }
+        String brand = request.getParameter("brand") == null ? "" : request.getParameter("brand");
+        String type = request.getParameter("type") == null ? "" : request.getParameter("type");
         String size = request.getParameter("size") == null ? "" : request.getParameter("size");
         String color = request.getParameter("color") == null ? "" : request.getParameter("color");
         String max = request.getParameter("max") == null ? "12" : request.getParameter("max");
@@ -95,7 +91,7 @@ public class ShopController extends HttpServlet {
         double price = request.getParameter("price") == null ? 10000 : Double.parseDouble(request.getParameter("price"));
         double sale = request.getParameter("sale") == null ? 0 : Double.parseDouble(request.getParameter("sale"));
 
-        ProductDTO selector = new ProductDTO("", brand, type, price, sale, 0, "", size, color);
+        ProductDTO selector = new ProductDTO("", brand, type, price, sale, 0, "", size, color, name);
 
         List<ProductDTO> list1 = dao.select(selector, max, min);
         int numOfPage = (int) Math.ceil(list1.size() / 8.0);
@@ -142,9 +138,9 @@ public class ShopController extends HttpServlet {
         int q1 = dao.revenue(brand, Date.valueOf(year + "-05-01"), Date.valueOf(year + "-01-01"));
         int q2 = dao.revenue(brand, Date.valueOf(year + "-09-01"), Date.valueOf(year + "-05-01"));
         int q3 = dao.revenue(brand, Date.valueOf(year + "-12-31"), Date.valueOf(year + "-09-01"));
-        System.out.println("q1: " + q1);
-        System.out.println("q2: " + q2);
-        System.out.println("q3: " + q3);
+//        System.out.println("q1: " + q1);
+//        System.out.println("q2: " + q2);
+//        System.out.println("q3: " + q3);
 
         request.setAttribute("q1", q1);
         request.setAttribute("q2", q2);
