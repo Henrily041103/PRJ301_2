@@ -18,7 +18,7 @@
                         <c:if test="${product.size==' '}"></br></c:if>
                         <c:if test="${product.color!=' '}"><h6 style="margin-top:5px" class="id">Color ${product.color}</h6></c:if>
                         <c:if test="${product.color==' '}"></br></c:if>
-                        <div class="mt-3 d-flex justify-content-between">    
+                            <div class="mt-3 d-flex justify-content-between">    
                             <c:if test="${current_user!= null && current_user.role=='ad'}">
                                 <a href='<c:url value='/shop/product.do?id=${product.proID}'/>' class='btn btn-outline-dark'>Edit</a>
                             </c:if>
@@ -34,29 +34,47 @@
 </div>
 
 <%--For displaying Previous link except for the 1st page --%>
-<c:if test="${pageNum != 1}">
-    <td><a href="shop.do?page=${pageNum - 1}">Previous</a></td>
-</c:if>
+
 
 <%--For displaying Page numbers. 
 The when condition does not display a link for the current page--%>
 <table border="1" cellpadding="5" cellspacing="5">
     <tr>
-        <c:forEach begin="1" end="${numOfPage}" var="i">
-            <c:choose>  
-                <c:when test="${pageNum eq i}">
-                    <td>${i}</td>
-                </c:when>
-                <c:otherwise>
-                    <td><a href="shop.do?page=${i}">${i}</a></td>
-                    </c:otherwise>
-                </c:choose>
-            </c:forEach>
+
     </tr>
-    
+
 </table>
 
 <%--For displaying Next link --%>
-<c:if test="${pageNum lt numOfPage}">
-    <td><a href="shop.do?page=${pageNum + 1}">Next</a></td>
-</c:if>
+
+
+<nav aria-label="pageNav" >
+    <ul class="pagination" style="margin-left:">
+        <c:if test="${pageNum != 1}">
+
+            <li class="page-item"><a class="page-link" style="font-weight: 600; color: black" href="shop.do?page=${pageNum - 1}">Previous</a></li>
+
+        </c:if>
+
+        <c:forEach begin="1" end="${numOfPage}" var="i">
+            <c:choose>  
+                <c:when test="${pageNum eq i}">
+
+                    <li class="page-item"><a class="page-link" style="color: white; background-color:black; font-weight: bolder" href="shop.do?page=${i}">${i}</a></li>
+
+                </c:when>
+                <c:otherwise>
+                    
+                    <li class="page-item"><a class="page-link" style="color: black" href="shop.do?page=${i}">${i}</a></li>
+
+                </c:otherwise>
+            </c:choose>
+        </c:forEach>
+
+        <c:if test="${pageNum lt numOfPage}">
+
+            <li class="page-item"><a class="page-link" style="font-weight: 600; color: black" href="shop.do?page=${pageNum + 1}">Next</a></li>
+
+        </c:if>
+    </ul>
+</nav>

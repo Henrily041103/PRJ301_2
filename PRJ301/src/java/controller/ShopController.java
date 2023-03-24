@@ -97,9 +97,8 @@ public class ShopController extends HttpServlet {
         List<ProductDTO> list = list1.subList(start, stop);
         
         request.setAttribute("numOfPage", numOfPage);
-        request.setAttribute("currentPage", pageNum);
+        request.setAttribute("pageNum", pageNum);
         request.setAttribute("list", list);
-        
         request.getRequestDispatcher(MAIN).forward(request, response);
     }
 
