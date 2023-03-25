@@ -97,7 +97,9 @@ public class LoginController extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
         } else {
             request.setAttribute("error_message", "Wrong username or password!");
-            response.sendRedirect(request.getContextPath() + "/" + LOGIN_CONTROLLER + "/" + LOGIN + ".do");
+            request.setAttribute("controller", LOGIN_CONTROLLER);
+            request.setAttribute("action", LOGIN);
+            request.getRequestDispatcher(MAIN).forward(request, response);
         }
 
     }
@@ -108,7 +110,7 @@ public class LoginController extends HttpServlet {
         String password = StringUtil.hash(request.getParameter("pass") + username);
         String repass = StringUtil.hash(request.getParameter("repass") + username);
         String email = request.getParameter("email");
-        
+
         if (repass.equals(password)) {
             AccountDTO account = dao.register(username, password, email);
             if (account != null) {
@@ -116,11 +118,15 @@ public class LoginController extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
             } else {
                 request.setAttribute("error_message", "An account with this email already exist.");
-                response.sendRedirect(request.getContextPath() + "/" + LOGIN_CONTROLLER + "/" + REGISTER + ".do");
+                request.setAttribute("controller", LOGIN_CONTROLLER);
+                request.setAttribute("action", LOGIN);
+                request.getRequestDispatcher(MAIN).forward(request, response);
             }
         } else {
             request.setAttribute("error_message", "Passwords don't match.");
-            response.sendRedirect(request.getContextPath() + "/" + LOGIN_CONTROLLER + "/" + REGISTER + ".do");
+            request.setAttribute("controller", LOGIN_CONTROLLER);
+            request.setAttribute("action", LOGIN);
+            request.getRequestDispatcher(MAIN).forward(request, response);
         }
     }
 

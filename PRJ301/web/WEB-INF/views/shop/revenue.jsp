@@ -8,6 +8,7 @@
 
 <form class="form-control" action="<c:url value='/shop/revenue-handler.do'/>">
     <select name="brand" class="btn btn-secondary dropdown-toggle" style="background-color:white; color: black" type="button" id="brand" data-bs-toggle="dropdown">
+        <p>Brand</p>
         <c:forEach var="brand" items="${brand_list}" varStatus="loop">
             <option class="dropdown-item" value="${brand}">${brand}</option>
         </c:forEach>

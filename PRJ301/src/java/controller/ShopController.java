@@ -8,6 +8,7 @@ package controller;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.Formatter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -53,7 +54,9 @@ public class ShopController extends HttpServlet {
         try {
             switch (action) {
                 case "shop":
-                    shop(request, response, session, dao);
+                    String search = request.getParameter("search");
+                    String search_op = request.getParameter("search_op");
+                    shop(request, response, dao, search, search_op);
                     request.getRequestDispatcher(MAIN).forward(request, response);
                     break;
                 case "product":
@@ -87,10 +90,10 @@ public class ShopController extends HttpServlet {
         }
     }
 
-    private void shop(HttpServletRequest request, HttpServletResponse response, HttpSession session, ProductDAO dao)
+    private void shop(HttpServletRequest request, HttpServletResponse response, ProductDAO dao, String search, String search_op)
             throws SQLException, ServletException, IOException {
+        ProductDTO selector = null;
         int pageNum = request.getParameter("page") == null ? 1 : Integer.parseInt(request.getParameter("page"));
-
         String name = request.getParameter("name") == null ? "" : request.getParameter("name");
         String brand = request.getParameter("brand") == null ? "" : request.getParameter("brand");
         String type = request.getParameter("type") == null ? "" : request.getParameter("type");
@@ -105,45 +108,72 @@ public class ShopController extends HttpServlet {
         if (currentUser != null && "us".equals(currentUser.getRole())) {
             stock = -1;
         }
-
-        ProductDTO selector = new ProductDTO("", brand, type, price, sale, stock, "", size, color, name);
-
+        if (search_op != null) {
+            switch (search_op) {
+                case "name":
+                    System.out.println(search);
+                    System.out.println(toUTF8(search));
+                    selector = new ProductDTO("", brand, type, price, sale, 0, "", size, color, search);
+                    request.setAttribute("search", search);
+                    break;
+                case "brand":
+                    selector = new ProductDTO("", search, type, price, sale, 0, "", size, color, name);
+                    request.setAttribute("search", search);
+                    break;
+                case "type":
+                    selector = new ProductDTO("", brand, search, price, sale, 0, "", size, color, name);
+                    request.setAttribute("search", search);
+                    break;
+                case "az":
+                    selector = new ProductDTO("", brand, type, price, sale, stock, "", size, color, name);
+                    break;
+                case "asc":
+                    selector = new ProductDTO("", brand, type, price, sale, 0, "", size, color, name);
+                    break;
+                case "desc":
+                    selector = new ProductDTO("", brand, type, price, sale, 0, "", size, color, name);
+                    break;
+            }
+        } else {
+            selector = new ProductDTO("", brand, type, price, sale, 0, "", size, color, name);
+            request.removeAttribute("search");
+        }
         List<ProductDTO> list1 = dao.select(selector, max, min);
         int numOfPage = (int) Math.ceil(list1.size() / 8.0);
         int start = (pageNum - 1) * 8 < list1.size() - 1 ? (pageNum - 1) * 8 : list1.size() - 1;
         int stop = pageNum * 8 < list1.size() ? pageNum * 8 : list1.size();
         List<ProductDTO> list = list1.subList(start, stop);
 
-        StringBuilder search = new StringBuilder();
+        StringBuilder searchTerm = new StringBuilder();
         if (!name.equals("")) {
-            search.append("&name=").append(name);
+            searchTerm.append("&name=").append(name);
         }
         if (!brand.equals("")) {
-            search.append("&brand=").append(brand);
+            searchTerm.append("&brand=").append(brand);
         }
         if (!type.equals("")) {
-            search.append("&type=").append(type);
+            searchTerm.append("&type=").append(type);
         }
         if (!size.equals("")) {
-            search.append("&size=").append(size);
+            searchTerm.append("&size=").append(size);
         }
         if (!color.equals("")) {
-            search.append("&color=").append(color);
+            searchTerm.append("&color=").append(color);
         }
         if (!max.equals("12")) {
-            search.append("&max=").append(max);
+            searchTerm.append("&max=").append(max);
         }
         if (!min.equals("0")) {
-            search.append("&min=").append(min);
+            searchTerm.append("&min=").append(min);
         }
         if (price < 10000) {
-            search.append("&price=").append(price);
+            searchTerm.append("&price=").append(price);
         }
         if (sale > 0) {
-            search.append("&sale=").append(sale);
+            searchTerm.append("&sale=").append(sale);
         }
 
-        request.setAttribute("search", search.toString());
+        request.setAttribute("search", searchTerm.toString());
         request.setAttribute("numOfPage", numOfPage);
         request.setAttribute("pageNum", pageNum);
         request.setAttribute("list", list);
@@ -283,4 +313,15 @@ public class ShopController extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    public String toUTF8(String isoString) {
+        String utf8String = null;
+        try {
+            byte[] stringBytesISO = isoString.getBytes("ISO-8859-1");
+            utf8String = new String(stringBytesISO, "UTF-8");
+        } catch (Exception e) {
+            System.out.println("UnsupportedEncodingException is: " + e.getMessage());
+            utf8String = isoString;
+        }
+        return utf8String;
+    }
 }
