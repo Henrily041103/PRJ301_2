@@ -62,8 +62,8 @@
                                         </c:when>
                                     </c:choose>
                                 </ul>
-                                <form class="d-flex">
-                                    <input class="form-control me-2" type="text" name="search" id="search" placeholder="Search a product">
+                                <form class="d-flex" action="<c:url value="/shop/shop.do"/>">
+                                    <input class="form-control me-2" type="text" name="name" id="name" placeholder="Search a product" value="${param.search}">
                                     <button class="btn btn-outline-success" type="submit">Search</button>
                                 </form>
                             </c:if >
@@ -81,7 +81,7 @@
                                     </li>                                    
                                 </ul>
                                 <form class="d-flex" action="<c:url value="/shop/shop.do"/>">
-                                    <input class="form-control me-2" type="text" name="name" id="name" placeholder="Search a product">
+                                    <input class="form-control me-2" type="text" name="name" id="name" placeholder="Search a product" value="${param.search}>
                                     <button class="btn btn-outline-success" type="submit">Search</button>
                                 </form>
                             </c:if >

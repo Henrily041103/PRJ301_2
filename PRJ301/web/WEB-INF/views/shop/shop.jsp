@@ -35,20 +35,20 @@
 <nav aria-label="pageNav" >
     <ul class="pagination" style="">
         <c:if test="${pageNum != 1}">
-            <li class="page-item"><a class="page-link" style="font-weight: 600; color: black" href="shop.do?page=${pageNum - 1}">Previous</a></li>
+            <li class="page-item"><a class="page-link" style="font-weight: 600; color: black" href="shop.do?page=${pageNum - 1}${search}">Previous</a></li>
             </c:if>
             <c:forEach begin="1" end="${numOfPage}" var="i">
                 <c:choose>  
                     <c:when test="${pageNum eq i}">
-                    <li class="page-item"><a class="page-link" style="color: white; background-color:black; font-weight: bolder" href="shop.do?page=${i}">${i}</a></li>
+                    <li class="page-item"><a class="page-link" style="color: white; background-color:black; font-weight: bolder" href="shop.do?page=${i}${search}">${i}</a></li>
                     </c:when>
                     <c:otherwise>
-                    <li class="page-item"><a class="page-link" style="color: black" href="shop.do?page=${i}">${i}</a></li>
+                    <li class="page-item"><a class="page-link" style="color: black" href="shop.do?page=${i}${search}">${i}</a></li>
                     </c:otherwise>
                 </c:choose>
             </c:forEach>
             <c:if test="${pageNum lt numOfPage}">
-            <li class="page-item"><a class="page-link" style="font-weight: 600; color: black" href="shop.do?page=${pageNum + 1}">Next</a></li>
+            <li class="page-item"><a class="page-link" style="font-weight: 600; color: black" href="shop.do?page=${pageNum + 1}${search}">Next</a></li>
             </c:if>
     </ul>
 </nav>

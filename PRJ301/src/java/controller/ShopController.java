@@ -15,9 +15,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import model.AccountDTO;
 import model.OrderDAO;
 import model.ProductDAO;
 import model.ProductDTO;
+import utils.StringUtil;
 
 /**
  *
@@ -51,7 +53,7 @@ public class ShopController extends HttpServlet {
         try {
             switch (action) {
                 case "shop":
-                    shop(request, response, dao);
+                    shop(request, response, session, dao);
                     request.getRequestDispatcher(MAIN).forward(request, response);
                     break;
                 case "product":
@@ -63,6 +65,12 @@ public class ShopController extends HttpServlet {
                     break;
                 case "revenue-handler":
                     revenueHandler(request, response, odao);
+                    break;
+                case "edit":
+                    edit(request, response, dao);
+                    break;
+                case "create":
+                    create(request, response, dao);
                     break;
                 default:
                     throw new ServletException();
@@ -79,7 +87,7 @@ public class ShopController extends HttpServlet {
         }
     }
 
-    private void shop(HttpServletRequest request, HttpServletResponse response, ProductDAO dao)
+    private void shop(HttpServletRequest request, HttpServletResponse response, HttpSession session, ProductDAO dao)
             throws SQLException, ServletException, IOException {
         int pageNum = request.getParameter("page") == null ? 1 : Integer.parseInt(request.getParameter("page"));
 
@@ -92,15 +100,50 @@ public class ShopController extends HttpServlet {
         String min = request.getParameter("min") == null ? "0" : request.getParameter("min");
         double price = request.getParameter("price") == null ? 10000 : Double.parseDouble(request.getParameter("price"));
         double sale = request.getParameter("sale") == null ? 0 : Double.parseDouble(request.getParameter("sale"));
+        int stock = 0;
+        AccountDTO currentUser = (AccountDTO) session.getAttribute("current_user");
+        if (currentUser != null && "us".equals(currentUser.getRole())) {
+            stock = -1;
+        }
 
-        ProductDTO selector = new ProductDTO("", brand, type, price, sale, 0, "", size, color, name);
+        ProductDTO selector = new ProductDTO("", brand, type, price, sale, stock, "", size, color, name);
 
         List<ProductDTO> list1 = dao.select(selector, max, min);
         int numOfPage = (int) Math.ceil(list1.size() / 8.0);
         int start = (pageNum - 1) * 8 < list1.size() - 1 ? (pageNum - 1) * 8 : list1.size() - 1;
-        int stop = pageNum * 8 < list1.size() - 1 ? pageNum * 8 : list1.size() - 1;
+        int stop = pageNum * 8 < list1.size() ? pageNum * 8 : list1.size();
         List<ProductDTO> list = list1.subList(start, stop);
 
+        StringBuilder search = new StringBuilder();
+        if (!name.equals("")) {
+            search.append("&name=").append(name);
+        }
+        if (!brand.equals("")) {
+            search.append("&brand=").append(brand);
+        }
+        if (!type.equals("")) {
+            search.append("&type=").append(type);
+        }
+        if (!size.equals("")) {
+            search.append("&size=").append(size);
+        }
+        if (!color.equals("")) {
+            search.append("&color=").append(color);
+        }
+        if (!max.equals("12")) {
+            search.append("&max=").append(max);
+        }
+        if (!min.equals("0")) {
+            search.append("&min=").append(min);
+        }
+        if (price < 10000) {
+            search.append("&price=").append(price);
+        }
+        if (sale > 0) {
+            search.append("&sale=").append(sale);
+        }
+
+        request.setAttribute("search", search.toString());
         request.setAttribute("numOfPage", numOfPage);
         request.setAttribute("pageNum", pageNum);
         request.setAttribute("list", list);
@@ -151,6 +194,53 @@ public class ShopController extends HttpServlet {
         request.setAttribute("controller", SHOP_CONTROLLER);
         request.setAttribute("action", REVENUE);
         request.getRequestDispatcher(MAIN).forward(request, response);
+    }
+
+    private void edit(HttpServletRequest request, HttpServletResponse response, ProductDAO dao)
+            throws SQLException, ServletException, IOException {
+        String id = request.getParameter("id");
+
+        ProductDTO currentProduct = dao.read(id);
+        if (currentProduct == null) {
+            request.setAttribute("error_message", "Product does not exist.");
+            request.setAttribute("controller", SHOP_CONTROLLER);
+            request.setAttribute("action", SHOP);
+            request.getRequestDispatcher(MAIN).forward(request, response);
+        } else {
+            String name = request.getParameter("name") == null ? currentProduct.getName() : request.getParameter("name");
+            String brand = request.getParameter("brand") == null ? currentProduct.getProBrand() : request.getParameter("brand");
+            String type = request.getParameter("type") == null ? currentProduct.getProType() : request.getParameter("type");
+            String size = request.getParameter("size") == null ? currentProduct.getSize() : request.getParameter("size");
+            String color = request.getParameter("color") == null ? currentProduct.getColor() : request.getParameter("color");
+            String ageGroup = request.getParameter("ageRange") == null ? currentProduct.getAgeGroup() : request.getParameter("ageRange");
+            double price = request.getParameter("price") == null ? currentProduct.getPrice() : Double.parseDouble(request.getParameter("price"));
+            double sale = request.getParameter("sale") == null ? currentProduct.getSale() : Double.parseDouble(request.getParameter("sale"));
+            int stock = request.getParameter("stock") == null ? currentProduct.getStock() : Integer.parseInt(request.getParameter("sale"));
+
+            ProductDTO newProduct = new ProductDTO(id, brand, type, price, sale, stock, ageGroup, size, color, name);
+            dao.update(newProduct);
+            response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
+        }
+
+    }
+
+    private void create(HttpServletRequest request, HttpServletResponse response, ProductDAO dao)
+            throws SQLException, ServletException, IOException {
+        String id = request.getParameter("id");
+        String name = request.getParameter("name");
+        String brand = request.getParameter("brand");
+        String type = request.getParameter("type");
+        String size = request.getParameter("size");
+        String color = request.getParameter("color");
+        String ageGroup = request.getParameter("ageRange");
+        double price = Double.parseDouble(request.getParameter("price"));
+        double sale = Double.parseDouble(request.getParameter("sale"));
+        int stock = Integer.parseInt(request.getParameter("sale"));
+
+        ProductDTO newProduct = new ProductDTO(id, brand, type, price, sale, stock, ageGroup, size, color, name);
+        dao.create(newProduct);
+        response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
