@@ -23,8 +23,20 @@
 </form>
 
 <c:if test="${handle==true}">
-    <div>${q1}</div>
-    <div>${q2}</div>
-    <div>${q3}</div>
+    <div class="progress" style="height:40px; margin-top: 25px">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: ${q1/(q1+q2+q3)*100}%" aria-valuenow="${this-total}" aria-valuemin="0" aria-valuemax="${total}">Q1</div>
+    </div>
+    
+    <br>
+    
+    <div class="progress" style="height:40px; margin-top: 25px">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: ${q2/(q1+q2+q3)*100}%" aria-valuenow="${this-total}" aria-valuemin="0" aria-valuemax="${total}">Q2</div>
+    </div>
+    
+    <br>
+    
+    <div class="progress" style="height:40px; margin-top: 25px">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"  style="width: ${q2/(q1+q2+q3)*100}%" aria-valuemin="${this-total}" aria-valuemax="${total}">Q3</div>
+    </div>
 </c:if>
 
