@@ -62,6 +62,8 @@ public class LoginController extends HttpServlet {
                 case "logout":
                     logout(request, response, session);
                     break;
+                default:
+                    throw new ServletException();
             }
         } catch (SQLException ex) {
             ex.printStackTrace();

@@ -13,6 +13,7 @@ import java.util.List;
  * @author Admin
  */
 public class ProductDTO {
+    private String name;
     private String proID;
     private String proBrand;
     private String proType;
@@ -26,7 +27,7 @@ public class ProductDTO {
     public ProductDTO() {
     }
 
-    public ProductDTO(String proID, String proBrand, String proType, double price, double sale, int stock, String ageGroup, String size, String color) {
+    public ProductDTO(String proID, String proBrand, String proType, double price, double sale, int stock, String ageGroup, String size, String color, String name) {
         this.proID = proID;
         this.proBrand = proBrand;
         this.proType = proType;
@@ -36,6 +37,7 @@ public class ProductDTO {
         this.ageGroup = ageGroup;
         this.size = size;
         this.color = color;
+        this.name = name;
     }
 
     public String getProID() {
@@ -113,14 +115,13 @@ public class ProductDTO {
     public String getImage() {
         return proID + ".jpg";
     }
-    
+
     public String getName() {
-        return proType + " của hãng " + proBrand;
+        return name;
     }
 
-    @Override
-    public String toString() {
-        return "ProductDTO{" + "proID=" + proID + ", proBrand=" + proBrand + ", proType=" + proType + ", price=" + price + ", sale=" + sale + ", stock=" + stock + ", ageGroup=" + ageGroup + ", size=" + size + ", color=" + color + '}';
+    public void setName(String name) {
+        this.name = name;
     }
     
     public String getDisplay() {
