@@ -15,28 +15,25 @@
                 </div>
                 <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
                     <form class="form-signin" action="<c:url value="/login/login-handler.do"/>" method="post">
-                        <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start" style="margin-bottom: 5px">
-                            <p class="lead fw-normal mb-0 me-3">Sign in</p>                     
+                        <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start" style="margin-bottom: 5px; font-weight: bold">
+                            <h1 class="lead fw-normal mb-0 me-3">Sign in</h1>                     
                         </div>
                         <!-- Email input -->
                         <div class="form-outline mb-4" >
-                            <input name="user"  type="text" id="user" class="form-control" placeholder="Username" required autofocus>
                             <label class="form-label" for="user">Username</label>
-                        </div>
+                            <input name="user"  type="text" id="user" class="form-control" placeholder="Username" required autofocus>
 
-                        <!-- Password input -->
-                        <div class="form-outline mb-3">
-                            <input name="pass"  type="password" id="pass" class="form-control" placeholder="Password" required>
-                            <label for="pass">Password: </label>
+                        </div>
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="pass">Password </label>
+                            <input name="pass"  type="password" id="pass" class="form-control" placeholder="Password" required>          
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center">
                             <!-- Checkbox -->
-                            <div class="form-check mb-0">
-                                <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
-                                <label class="form-check-label" for="form2Example3">
-                                    Remember me
-                                </label>
+                            <div class="form-group form-check">
+                                <input name="remember" value="1" type="checkbox" class="form-check-input" id="exampleCheck1">
+                                <label class="form-check-label" for="exampleCheck1">Remember me</label>
                             </div>
                         </div>
 
@@ -51,22 +48,4 @@
             </div>
         </div>
     </section>
-
-    <form class="form-signin" action="<c:url value="/login/login-handler.do"/>" method="post">
-        <h1 class="h3 mb-3 font-weight-normal" style="text-align: center"> Sign in</h1>
-
-        <label for="user">Username: </label>
-        <input name="user"  type="text" id="user" class="form-control" placeholder="Username" required autofocus>
-        <label for="pass">Password: </label>
-        <input name="pass"  type="password" id="pass" class="form-control" placeholder="Password" required>
-
-        <div class="form-group form-check">
-            <input name="remember" value="1" type="checkbox" class="form-check-input" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Remember me</label>
-        </div>
-
-        <button class="btn btn-success btn-block" type="submit"><i class="fas fa-sign-in-alt"></i> Sign in</button>
-        <a href="<c:url value="/login/register.do"/>" class="btn btn-primary btn-block"> <i class="fas fa-user-plus"></i>Sign up</a>
-        <hr>
-    </form>
 </div>
