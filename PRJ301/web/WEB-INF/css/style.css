@@ -28,3 +28,12 @@ and open the template in the editor.
 #search-bar{
     margin-top: 15px;
 }
+
+.card-img-top {
+    max-height: 300px;
+    /*min-height: 300px;*/
+}
+
+.card-container {
+    height: 300px;
+}

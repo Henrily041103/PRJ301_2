@@ -20,5 +20,27 @@
     </ul>
 </div>
 
+<div class="progress" style="height:40px; margin-top: 25px">
+    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: ${this-total}%" aria-valuenow="${this-total}" aria-valuemin="0" aria-valuemax="${total}">Q1</div>
+</div>
 
+<br>
+
+<div class="progress" style="height:40px; margin-top: 25px">
+    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: ${this-total}%" aria-valuenow="${this-total}" aria-valuemin="0" aria-valuemax="${total}">Q2</div>
+</div>
+
+<br>
+
+<div class="progress" style="height:40px; margin-top: 25px">
+    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"  style="width: ${this-total}%" aria-valuemin="${this-total}" aria-valuemax="${total}">Q3</div>
+</div>
+
+<br>
+
+<div class="progress" style="height:40px; margin-top: 25px">
+    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"  style="width: ${this-total}%" aria-valuemin="${this-total}" aria-valuemax="${total}">Q4</div>
+</div>
+
+<br>
 
