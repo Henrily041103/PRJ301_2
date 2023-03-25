@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Admin
  */
 public class ImageController extends HttpServlet {
-    private static final String PATH = "D:\\work\\FPT\\2023_HK1\\PRJ301\\PRJ301_2\\PRJ301\\resources";
+    private static final String PATH = "C:\\FPT\\PRJ_project\\PRJ301_2\\PRJ301\\resources";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
