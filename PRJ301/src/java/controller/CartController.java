@@ -67,6 +67,8 @@ public class CartController extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
                     break;
                 case "show":
+                    request.setAttribute("controller", CART_CONTROLLER);
+                    request.setAttribute("action", CART);
                     request.getRequestDispatcher(MAIN).forward(request, response);
                     break;
 
