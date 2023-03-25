@@ -21,7 +21,7 @@ import utils.DBUtils;
 public class ProductDAO {
     private static final String LOWER = "update BabyStore.dbo.Product set stock = ? where ProID = ?";
 
-    private static final String SELECT = "select * from Product where ProBrand like ? and ProType like ? and Price <= ? and Stock > 0 and Sale >= ? and Size like ? and Color like ? and ProName like ?";
+    private static final String SELECT = "select * from Product where ProBrand like ? and Price <= ? and Stock > 0 and Sale >= ? and Size like ? and Color like ?";
     private static final String CREATE = "insert into BabyStore.dbo.Product values(?, ?, ?, ?, ?, ?, ? ,? ,?, ?)";
     private static final String READ = "select * from BabyStore.dbo.Product where ProID = ? and Stock > 0";
     private static final String DELETE = "update BabyStore.dbo.Product set stock = 0 where ProId = ?";
@@ -30,14 +30,13 @@ public class ProductDAO {
     public List<ProductDTO> select (ProductDTO selector, String max, String min) throws SQLException {
         List<ProductDTO> list;
         Connection con = DBUtils.getConnection();
-        PreparedStatement stm = con.prepareStatement(SELECT + " and AgeGroup in" + selector.toData(max, min));
+        String sel = SELECT + " and AgeGroup in" + selector.toData(max, min) + " and ProName like N'%" + selector.getName() + "%' and ProType like N'%" + selector.getProType() + "%'";
+        PreparedStatement stm = con.prepareStatement(sel);
         stm.setString(1, "%"+selector.getProBrand()+"%");
-        stm.setString(2, "%"+selector.getProType()+"%");
-        stm.setFloat(3, (float)selector.getPrice());
-        stm.setFloat(4, (float)selector.getSale());
-        stm.setString(5, "%"+ selector.getSize() +"%");
-        stm.setString(6, "%"+ selector.getColor() +"%");
-        stm.setString(7, "%"+ selector.getName()+"%");
+        stm.setFloat(2, (float)selector.getPrice());
+        stm.setFloat(3, (float)selector.getSale());
+        stm.setString(4, "%"+ selector.getSize() +"%");
+        stm.setString(5, "%"+ selector.getColor() +"%");
         ResultSet rs = stm.executeQuery();
         
         list = null;

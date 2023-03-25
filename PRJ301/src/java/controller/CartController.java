@@ -63,7 +63,8 @@ public class CartController extends HttpServlet {
         try {
             switch (action) {
                 case "add":
-                    add(request, response, cart, session, pdao);
+                    String id = request.getParameter("id");
+                    add(request, response, cart, session, pdao, id);
                     response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
                     break;
                 case "show":
@@ -112,11 +113,9 @@ public class CartController extends HttpServlet {
     }
 
     public void add(HttpServletRequest request, HttpServletResponse response,
-            HashMap<ProductDTO, Integer> cart, HttpSession session, ProductDAO pdao)
+            HashMap<ProductDTO, Integer> cart, HttpSession session, ProductDAO pdao, String id)
             throws ServletException, IOException, SQLException {
-
-        String id = request.getParameter("ProId");
-        int amount = Integer.parseInt(request.getParameter("amount"));
+        int amount = request.getParameter("amount")!=null ? Integer.parseInt(request.getParameter("amount")) : 1;
         ProductDTO prod = pdao.read(id);
         //check for existing product
         if (cart.containsKey(prod)) {
