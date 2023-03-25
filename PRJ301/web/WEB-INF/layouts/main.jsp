@@ -29,7 +29,7 @@
                         <a class="navbar-brand" href="<c:url value="/shop/shop.do"/>" style="font-weight:bolder; font-size: 50px">
                             <img src="<c:url value="/images/logo.png"/>"/></a>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            
+
                             <c:if test="${current_user==null}"> 
                                 <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="font-size: 25px; margin-left: 5px">
                                     <li class="home">
@@ -40,7 +40,7 @@
                                     </li>
                                 </ul>
                             </c:if >
-                            
+
                             <c:if test="${current_user!=null && current_user.role=='us'}">
                                 <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="font-size: 20px">
                                     <li class="home">
@@ -67,7 +67,7 @@
                                     <button class="btn btn-outline-success" type="submit">Search</button>
                                 </form>
                             </c:if >
-                            
+
                             <c:if test="${current_user!= null && current_user.role=='ad'}">
                                 <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="font-size: 20px">
                                     <li class="home">
@@ -80,8 +80,8 @@
                                         <a class="nav-link active" href="<c:url value="/login/logout.do"/>">Logout</a>
                                     </li>                                    
                                 </ul>
-                                <form class="d-flex">
-                                    <input class="form-control me-2" type="text" name="search" id="search" placeholder="Search a product">
+                                <form class="d-flex" action="<c:url value="/shop/shop.do"/>">
+                                    <input class="form-control me-2" type="text" name="name" id="name" placeholder="Search a product">
                                     <button class="btn btn-outline-success" type="submit">Search</button>
                                 </form>
                             </c:if >
