@@ -40,22 +40,22 @@
                                             <a class="nav-link active" style="color:blue" href="<c:url value="/login/login.do"/>">Login</a>
                                         </li>  
                                     </c:if>
+                                    <c:if test="${action=='shop' || action==null}">
+                                        <c:if test="${cart==null || cart.size==0}">
 
-                                    <c:if test="${cart==null || cart.size==0}">
+                                            <li class="cart">
+                                                <a class="nav-link active" href="<c:url value="/cart/show.do"/>">Cart</a>
+                                            </li>
 
-                                        <li class="cart">
-                                            <a class="nav-link active" href="<c:url value="/cart/show.do"/>">Cart</a>
-                                        </li>
+                                        </c:if >
+                                        <c:if test="${cart!=null && cart.size>0}">
+                                            <li class="cart">
+                                                <a class="nav-link active" style="color:red" href="<c:url value="/cart/show.do"/>">Cart</a>
+                                            </li>
+                                        </c:if >
 
-                                    </c:if >
-                                    <c:if test="${cart!=null && cart.size>0}">
-                                        <li class="cart">
-                                            <a class="nav-link active" style="color:red" href="<c:url value="/cart/show.do"/>">Cart</a>
-                                        </li>
-                                    </c:if >
+                                    </ul>
 
-                                </ul>
-                                <c:if test="${action=='shop' || action==null}">
                                     <form class="d-flex" action="<c:url value="/shop/shop.do"/>">
                                         <input class="form-control me-2" type="text" name="search" id="search" placeholder="Search a product" value="${search}">
                                         <button class="btn btn-outline-success" type="submit">Search</button>
@@ -80,20 +80,20 @@
                                     <li class="logout">
                                         <a class="nav-link active" style="color:red" href="<c:url value="/login/logout.do"/>">Logout</a>
                                     </li>
+                                    <c:if test="${action=='shop' || action==null}">
+                                        <c:if test="${cart==null || cart.size==0}">
+                                            <li class="cart">
+                                                <a class="nav-link active" href="<c:url value="/cart/show.do"/>">Cart</a>
+                                            </li>
+                                        </c:if >
+                                        <c:if test="${cart!=null && cart.size>0}">
+                                            <li class="cart">
+                                                <a class="nav-link active" style="color:red" href="<c:url value="/cart/show.do"/>">Cart</a>
+                                            </li>
+                                        </c:if >
 
-                                    <c:if test="${cart==null || cart.size==0}">
-                                        <li class="cart">
-                                            <a class="nav-link active" href="<c:url value="/cart/show.do"/>">Cart</a>
-                                        </li>
-                                    </c:if >
-                                    <c:if test="${cart!=null && cart.size>0}">
-                                        <li class="cart">
-                                            <a class="nav-link active" style="color:red" href="<c:url value="/cart/show.do"/>">Cart</a>
-                                        </li>
-                                    </c:if >
+                                    </ul>
 
-                                </ul>
-                                <c:if test="${action=='shop' || action==null}">
                                     <form class="d-flex" action="<c:url value="/shop/shop.do"/>">
                                         <input class="form-control me-2" type="text" name="search" id="search" placeholder="Search a product" value="${search}">
                                         <button class="btn btn-outline-success" type="submit">Search</button>
