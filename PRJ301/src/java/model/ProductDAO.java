@@ -23,7 +23,7 @@ public class ProductDAO {
 
     private static final String SELECT = "select * from Product where ProBrand like ? and ProType like ? and Price <= ? and Stock > 0 and Sale >= ? and Size like ? and Color like ? and ProName like ?";
     private static final String CREATE = "insert into BabyStore.dbo.Product values(?, ?, ?, ?, ?, ?, ? ,? ,?, ?)";
-    private static final String READ = "select * from BabyStore.dbo.Product where ProID = ?";
+    private static final String READ = "select * from BabyStore.dbo.Product where ProID = ? and Stock > 0";
     private static final String DELETE = "update BabyStore.dbo.Product set stock = 0 where ProId = ?";
     private static final String UPDATE = "update BabyStore.dbo.Product set ProBrand = ?, ProType = ?, price = ?, sale = ?, stock = ?, ageGroup = ?, size = ?, color = ?, ProName = ? where ProID = ?";
     

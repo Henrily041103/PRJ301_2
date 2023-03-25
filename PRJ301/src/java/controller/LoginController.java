@@ -79,7 +79,7 @@ public class LoginController extends HttpServlet {
 
     private void logout(HttpServletRequest request, HttpServletResponse response, HttpSession session)
             throws SQLException, ServletException, IOException {
-        session.invalidate();
+        session.setAttribute("current_user", null);
         response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
     }
 
@@ -92,8 +92,6 @@ public class LoginController extends HttpServlet {
         AccountDTO account = dao.login(username, password);
 
         if (account != null) {
-//            request.setAttribute("controller", SHOP_CONTROLLER);
-//            request.setAttribute("action", SHOP);
             session.setAttribute("current_user", account);
             response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
         } else {
@@ -109,7 +107,7 @@ public class LoginController extends HttpServlet {
         String password = request.getParameter("pass");
         String repass = request.getParameter("repass");
         String email = request.getParameter("email");
-        //TODO: check validity of password
+        
         if (repass.equals(password)) {
             AccountDTO account = dao.register(username, password, email);
             if (account != null) {

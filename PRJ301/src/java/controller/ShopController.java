@@ -64,6 +64,8 @@ public class ShopController extends HttpServlet {
                 case "revenue-handler":
                     revenueHandler(request, response, odao);
                     break;
+                default:
+                    throw new ServletException();
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
