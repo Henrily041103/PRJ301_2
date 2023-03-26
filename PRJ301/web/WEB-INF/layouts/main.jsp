@@ -71,9 +71,6 @@
                             <!--                           IF USER IS A USER-->
                             <c:if test="${current_user!=null && current_user.role=='us'}">
                                 <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="font-size: 20px">
-                                    <li class="home">
-                                        <a class="nav-link active" href="<c:url value="/shop/shop.do"/>">Home</a>
-                                    </li>
                                     <c:if test="${action=='shop' || action==null}">
                                         <c:if test="${cart==null || cart.size==0}">
                                             <li class="cart">

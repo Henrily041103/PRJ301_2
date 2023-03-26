@@ -78,5 +78,5 @@
         </form>
         </tbody>
     </table>
-    <h3 style="margin-bottom:100px; margin-top: 20px">Total: ${total}</h3>
+    <h3 style="margin-bottom:100px; margin-top: 20px">Total: $${total}</h3>
 </div>

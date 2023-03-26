@@ -182,6 +182,11 @@ public class ShopController extends HttpServlet {
             request.setAttribute("error_message", "Something is wrong.");
             response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
         } else {
+            int total = 0;
+            for (OrderDTO order : orders.keySet()) {
+                total += order.getAmount() * orders.get(order).getPrice() * (100 - orders.get(order).getSale()) * 0.01;
+            }
+            request.setAttribute("total", total);
             request.setAttribute("account", account);
             request.setAttribute("orders", orders);
             request.getRequestDispatcher(MAIN).forward(request, response);
@@ -257,7 +262,7 @@ public class ShopController extends HttpServlet {
         String ageGroup = request.getParameter("ageRange");
         double price = Double.parseDouble(request.getParameter("price"));
         double sale = Double.parseDouble(request.getParameter("sale"));
-        int stock = Integer.parseInt(request.getParameter("sale"));
+        int stock = Integer.parseInt(request.getParameter("stock"));
 
         ProductDTO newProduct = new ProductDTO(id, brand, type, price, sale, stock, ageGroup, size, color, name);
         dao.create(newProduct);
