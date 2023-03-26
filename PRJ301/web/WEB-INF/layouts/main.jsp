@@ -33,9 +33,6 @@
                             <!--                            IF NOT LOGGED IN-->
                             <c:if test="${current_user==null}"> 
                                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                                    <li class="home" >
-                                        <a class="nav-link active" href="<c:url value="/shop/shop.do"/>">Home</a>
-                                    </li>
                                     <c:if test="${action!='login'}">
                                         <li class="login">
                                             <a class="nav-link active" style="color:blue" href="<c:url value="/login/login.do"/>">Login</a>

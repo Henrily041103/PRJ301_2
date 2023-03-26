@@ -9,16 +9,21 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import model.AccountDAO;
 import model.AccountDTO;
 
 /**
@@ -26,17 +31,17 @@ import model.AccountDTO;
  * @author Admin
  */
 public class AuthFilter implements Filter {
-    
+
     private static final boolean debug = true;
 
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
     // configured. 
     private FilterConfig filterConfig = null;
-    
+
     public AuthFilter() {
-    }    
-    
+    }
+
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
@@ -63,8 +68,8 @@ public class AuthFilter implements Filter {
 	    log(buf.toString());
 	}
          */
-    }    
-    
+    }
+
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
@@ -102,22 +107,47 @@ public class AuthFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
-        HttpServletRequest httpReq = (HttpServletRequest)request;
-        HttpServletResponse httpRes = (HttpServletResponse)response;
+        HttpServletRequest httpReq = (HttpServletRequest) request;
+        HttpServletResponse httpRes = (HttpServletResponse) response;
         HttpSession session = httpReq.getSession();
-        
-        String url= httpReq.getServletPath();
-        AccountDTO currentUser = (AccountDTO)session.getAttribute("current_user");
+
+        String url = httpReq.getServletPath();
+        AccountDTO currentUser = (AccountDTO) session.getAttribute("current_user");
         String op = httpReq.getParameter("op");
+        Cookie[] cookies = httpReq.getCookies();
+        String userName = null;
+        String remember = null;
+        if (cookies != null && currentUser != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("cookId")) {
+                    userName = cookie.getValue();
+                }
+                if (cookie.getName().equals("cookrem")) {
+                    remember = cookie.getValue();
+                }
+            }
+            AccountDAO dao = new AccountDAO();
+            try {
+                if (dao.read(userName) != null && remember=="1") {
+                  currentUser = dao.read(userName);
+                  session.setAttribute("current_user", currentUser);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(AuthFilter.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 //        ArrayList<String> accAuth = new ArrayList();
 //        accAuth.add("cart/buy_handler.do");
-        if ((currentUser==null || !"us".equals(currentUser.getRole()))
-                && op!=null && url!=null&& op.equals("buy")&&url.contains("cart/buy_handler.do")){
-            httpRes.sendRedirect(httpReq.getContextPath() +"/login/login.do");
+        if (currentUser != null && url.contains("/login/") &&  !url.contains("/login/logout.do")) {
+            httpRes.sendRedirect(httpReq.getContextPath() + "/shop/shop.do");
         }
-        else {
+        if ((currentUser == null || !"us".equals(currentUser.getRole()))
+                && op != null && url != null && op.equals("buy") && url.contains("cart/buy_handler.do")) {
+            httpRes.sendRedirect(httpReq.getContextPath() + "/login/login.do");
+        } else {
             chain.doFilter(request, response);
         }
+
     }
 
     /**
@@ -139,16 +169,16 @@ public class AuthFilter implements Filter {
     /**
      * Destroy method for this filter
      */
-    public void destroy() {        
+    public void destroy() {
     }
 
     /**
      * Init method for this filter
      */
-    public void init(FilterConfig filterConfig) {        
+    public void init(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
-            if (debug) {                
+            if (debug) {
                 log("AuthFilter:Initializing filter");
             }
         }
@@ -167,20 +197,20 @@ public class AuthFilter implements Filter {
         sb.append(")");
         return (sb.toString());
     }
-    
+
     private void sendProcessingError(Throwable t, ServletResponse response) {
-        String stackTrace = getStackTrace(t);        
-        
+        String stackTrace = getStackTrace(t);
+
         if (stackTrace != null && !stackTrace.equals("")) {
             try {
                 response.setContentType("text/html");
                 PrintStream ps = new PrintStream(response.getOutputStream());
-                PrintWriter pw = new PrintWriter(ps);                
+                PrintWriter pw = new PrintWriter(ps);
                 pw.print("<html>\n<head>\n<title>Error</title>\n</head>\n<body>\n"); //NOI18N
 
                 // PENDING! Localize this for next official release
-                pw.print("<h1>The resource did not process correctly</h1>\n<pre>\n");                
-                pw.print(stackTrace);                
+                pw.print("<h1>The resource did not process correctly</h1>\n<pre>\n");
+                pw.print(stackTrace);
                 pw.print("</pre></body>\n</html>"); //NOI18N
                 pw.close();
                 ps.close();
@@ -197,7 +227,7 @@ public class AuthFilter implements Filter {
             }
         }
     }
-    
+
     public static String getStackTrace(Throwable t) {
         String stackTrace = null;
         try {
@@ -211,9 +241,9 @@ public class AuthFilter implements Filter {
         }
         return stackTrace;
     }
-    
+
     public void log(String msg) {
-        filterConfig.getServletContext().log(msg);        
+        filterConfig.getServletContext().log(msg);
     }
-    
+
 }

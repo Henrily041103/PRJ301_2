@@ -59,7 +59,7 @@ public class CartController extends HttpServlet {
         HashMap<ProductDTO, Integer> cart = session.getAttribute("cart") == null ? new HashMap() : (HashMap<ProductDTO, Integer>) session.getAttribute("cart");
         //key: product - value: amount
         String action = (String) request.getAttribute("action");
-
+        int total = 0;
         try {
             switch (action) {
                 case "add":
@@ -67,11 +67,11 @@ public class CartController extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
                     break;
                 case "cart":
-                    int total = 0;
-                    for ( ProductDTO prod:cart.keySet()) {
-                        total += cart.get(prod)*prod.getPrice()*(100-prod.getSale())*0.01;
+                    total = 0;
+                    for (ProductDTO prod : cart.keySet()) {
+                        total += cart.get(prod) * prod.getPrice() * (100 - prod.getSale()) * 0.01;
                     }
-                    request.setAttribute("total", total);
+                    request.setAttribute("total","$" + total);
                     request.setAttribute("controller", CART_CONTROLLER);
                     request.setAttribute("action", CART);
                     request.getRequestDispatcher(MAIN).forward(request, response);
@@ -92,9 +92,13 @@ public class CartController extends HttpServlet {
                             //Trở về trang chính shop
                             response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
                             break;
-                        case "buy":
+                        case "buy":                          
+                            total = 0;
+                            for (ProductDTO prod : cart.keySet()) {
+                                total += cart.get(prod) * prod.getPrice() * (100 - prod.getSale()) * 0.01;
+                            }
+                            request.setAttribute("total","$" + total);
                             buy(request, response, cart, session, pdao, odao);
-
                             break;
                         case "add":
                             changeAmount(request, response, cart, session, pdao, 1);
@@ -153,22 +157,14 @@ public class CartController extends HttpServlet {
             pdao.lowerStock(cart); //stock amount - cart amount
             long millis = System.currentTimeMillis();
             Date today = new Date(millis);
-            List<OrderDTO> orders = new ArrayList();
 
-            for (ProductDTO prod : cart.keySet()) {
-                OrderDTO order = new OrderDTO(StringUtil.getAlphaNumericString(9), prod.getProID(),
-                        ((AccountDTO) session.getAttribute("current_user")).getUserID(), cart.get(prod), today);
-                odao.create(order);
-                orders.add(order);
-            }
             session.removeAttribute("cart");
-            request.setAttribute("orders", orders);
+            request.setAttribute("order", cart);
             request.setAttribute("controller", CART_CONTROLLER);
             request.setAttribute("action", RECEIPT);
             request.getRequestDispatcher(MAIN).forward(request, response);
         } else {
-            request.setAttribute("controller", SHOP_CONTROLLER);
-            request.setAttribute("action", SHOP);
+            response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
         }
     }
 

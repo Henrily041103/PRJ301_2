@@ -73,8 +73,22 @@ public class ShopController extends HttpServlet {
                 case "revenue-handler":
                     revenueHandler(request, response, odao);
                     break;
-                case "edit":
-                    edit(request, response, pdao);
+//                case "edit":
+//                    edit(request, response, pdao);
+//                    break;
+                case "edit_handler":
+                    String op = request.getParameter("op");
+                    switch (op) {
+                        case "update":
+                            edit(request, response, pdao);
+                            break;
+                        case "delete":
+                            delete(request, response, pdao);
+                            break;
+                        case "back":
+                            response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
+                            break;
+                    }
                     break;
                 case "create":
                     create(request, response, pdao);
@@ -98,14 +112,14 @@ public class ShopController extends HttpServlet {
             throws SQLException, ServletException, IOException {
         //get current page
         int pageNum = request.getParameter("page") == null ? 1 : Integer.parseInt(request.getParameter("page"));
-        
+
         //display unstocked items?
         int stock = 0;
         AccountDTO currentUser = (AccountDTO) session.getAttribute("current_user");
         if (currentUser != null && "us".equals(currentUser.getRole())) {
             stock = -1;
         }
-        
+
         //search and sort
         List<ProductDTO> list1 = null;
         String search = "", sort = "";
@@ -114,23 +128,22 @@ public class ShopController extends HttpServlet {
             search = request.getParameter("search");
             searchTerm.append("&search=").append(search);
             System.out.println(search);
-            list1 = dao.select("%" + search + "%", stock);       
-        }               
+            list1 = dao.select("%" + search + "%", stock);
+        }
         if (request.getParameter("sort") != null && !"none".equals(request.getParameter("sort"))) {
             sort = request.getParameter("sort");
             searchTerm.append("&sort=").append(sort);
             System.out.println(sort);
-            list1 = dao.select("%" + search + "%", stock, sort);  
-        }
-        else{
+            list1 = dao.select("%" + search + "%", stock, sort);
+        } else {
             list1 = dao.select("%" + search + "%", stock);
-        }       
+        }
         //initiate rest of pagination
         int numOfPage = (int) Math.ceil(list1.size() / 8.0);
         int start = (pageNum - 1) * 8 < list1.size() ? (pageNum - 1) * 8 : list1.size();
         int stop = pageNum * 8 < list1.size() ? pageNum * 8 : list1.size();
         List<ProductDTO> list = list1.subList(start, stop);
-        
+
         //send
         request.setAttribute("search_term", searchTerm.toString());
         request.setAttribute("search", search);
@@ -251,7 +264,21 @@ public class ShopController extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
 
     }
+    
+    private void delete(HttpServletRequest request, HttpServletResponse response, ProductDAO dao) throws SQLException, ServletException, IOException{
+        String id = request.getParameter("id");
 
+        ProductDTO currentProduct = dao.read(id);
+        if (currentProduct == null) {
+            request.setAttribute("error_message", "Product does not exist.");
+            request.setAttribute("controller", SHOP_CONTROLLER);
+            request.setAttribute("action", SHOP);
+            request.getRequestDispatcher(MAIN).forward(request, response);
+        } else {
+            dao.delete(id);
+            response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
+        }
+    }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -292,15 +319,4 @@ public class ShopController extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    public String toUTF8(String isoString) {
-        String utf8String = null;
-        try {
-            byte[] stringBytesISO = isoString.getBytes("ISO-8859-1");
-            utf8String = new String(stringBytesISO, "UTF-8");
-        } catch (Exception e) {
-            System.out.println("UnsupportedEncodingException is: " + e.getMessage());
-            utf8String = isoString;
-        }
-        return utf8String;
-    }
 }

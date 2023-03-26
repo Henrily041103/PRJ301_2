@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -88,12 +89,21 @@ public class LoginController extends HttpServlet {
             throws SQLException, ServletException, IOException {
         String username = request.getParameter("user");
         String password = request.getParameter("pass");
-
+        String remember = request.getParameter("remember") == null ? "0" : "1";
+        System.out.println(remember);
         //TODO: check validity of password
         AccountDTO account = dao.login(username, password);
 
         if (account != null) {
             session.setAttribute("current_user", account);
+            if (!"0".equals(remember)) {
+                Cookie cRemember = new Cookie("cookrem", remember.trim());
+                cRemember.setMaxAge(60 * 60); //30 seconds
+                response.addCookie(cRemember);
+                Cookie cUserID = new Cookie("cookid", username.trim());
+                cUserID.setMaxAge(60*60);
+                response.addCookie(cUserID);
+            }
             response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
         } else {
             request.setAttribute("error_message", "Wrong username or password!");
@@ -109,7 +119,7 @@ public class LoginController extends HttpServlet {
         String username = request.getParameter("user");
         String password = request.getParameter("pass");
         String repass = request.getParameter("repass");
-        String email = request.getParameter("email");
+        String email = request.getParameter("email");      
 
         if (repass.equals(password)) {
             AccountDTO account = dao.register(username, password, email);
