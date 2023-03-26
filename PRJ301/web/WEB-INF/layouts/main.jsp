@@ -41,19 +41,31 @@
                                     </c:if>
                                     <c:if test="${action=='shop' || action==null}">
                                         <c:if test="${cart==null || cart.size==0}">
-
                                             <li class="cart">
                                                 <a class="nav-link active" href="<c:url value="/cart/show.do"/>">Cart</a>
                                             </li>
-
                                         </c:if >
                                         <c:if test="${cart!=null && cart.size>0}">
                                             <li class="cart">
                                                 <a class="nav-link active" style="color:red" href="<c:url value="/cart/show.do"/>">Cart</a>
                                             </li>
                                         </c:if >
+                                    </c:if >
 
-                                    </ul>
+                                </ul>
+                                <c:if test="${action=='shop' || action==null}">
+
+
+                                    <form class="d-flex" action="<c:url value="/shop/shop.do"/>">
+                                        <button class="btn btn-outline" type="submit" style="margin-right: 1px"><i class="bi bi-search"></i></button>
+                                        <input class="form-control me-2" type="text" name="search" id="search" placeholder="Search a product" value="${param.search}">
+                                        <select class="form-control" style="margin-left:10px" name="search_op" id="search_op" >
+                                            <option value="az">Name: A - Z</option>
+                                            <option value="za">Name: Z - A</option>
+                                            <option value="asc">Asc Price</option>
+                                            <option value="desc">Desc Price</option>
+                                        </select>                    
+                                    </form>  
                                 </c:if>
                             </c:if >
 
@@ -76,22 +88,19 @@
                                                 <a class="nav-link active" style="color:red" href="<c:url value="/cart/show.do"/>">Cart</a>
                                             </li>
                                         </c:if >
-
-                                    </ul>
-
+                                    </c:if >
+                                </ul>
+                                <c:if test="${action=='shop' || action==null}">
                                     <form class="d-flex" action="<c:url value="/shop/shop.do"/>">
+                                        <button class="btn btn-outline" type="submit" style="margin-right: 1px"><i class="bi bi-search"></i></button>
                                         <input class="form-control me-2" type="text" name="search" id="search" placeholder="Search a product" value="${param.search}">
-                                        <button class="btn btn-outline-success" type="submit">Search</button>
-                                        <select style="margin-left:10px" name="search_op" id="search_op">
-                                            <option value="name">Name</option>
-                                            <option value="brand">Brand</option>
-                                            <option value="type">Type</option>
+                                        <select class="form-control" style="margin-left:10px" name="search_op" id="search_op" >
                                             <option value="az">Name: A - Z</option>
+                                            <option value="za">Name: Z - A</option>
                                             <option value="asc">Asc Price</option>
                                             <option value="desc">Desc Price</option>
-                                        </select>
-                                        <button class="btn btn-outline-warning" style="margin-left: 10px" type="option">More</button>
-                                    </form>
+                                        </select>                    
+                                    </form>    
                                 </c:if>
                             </c:if >
 
@@ -107,8 +116,19 @@
                                         <a class="nav-link active" style="color:red" href="<c:url value="/login/logout.do"/>">Logout</a>
                                     </li>                                    
                                 </ul>
+                                <c:if test="${action=='shop' || action==null}">
+                                    <form class="d-flex" action="<c:url value="/shop/shop.do"/>">
+                                        <button class="btn btn-outline" type="submit" style="margin-right: 1px"><i class="bi bi-search"></i></button>
+                                        <input class="form-control me-2" type="text" name="search" id="search" placeholder="Search a product" value="${param.search}">
+                                        <select class="form-control" style="margin-left:10px" name="search_op" id="search_op" >
+                                            <option value="az">Name: A - Z</option>
+                                            <option value="za">Name: Z - A</option>
+                                            <option value="asc">Asc Price</option>
+                                            <option value="desc">Desc Price</option>
+                                        </select>                    
+                                    </form>      
+                                </c:if>
                             </c:if >
-
                         </div>
                     </div>
                 </nav>
