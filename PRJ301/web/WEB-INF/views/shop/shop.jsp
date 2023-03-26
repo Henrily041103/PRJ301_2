@@ -50,7 +50,7 @@
                         <c:if test="${product.size.trim()!=''}">Size: <input style="margin-top:5px" id="size" type="text" value="${product.size}"></br></c:if>   
                         Price: <input style="margin-top:5px" id="price" type="float" value="${product.price}"></br>       
                         <div class="mt-3 d-flex justify-content-between">    
-                            <a href='<c:url value='/shop/product.do?id=${product.proID}'/>' class='btn btn-outline-dark'>Edit</a>
+                            <a href='<c:url value='/shop/product.do?id=${product.proID}'/>' class='btn btn-outline-danger'>Update</a>
                         </div>
                     </div>
                 </div>

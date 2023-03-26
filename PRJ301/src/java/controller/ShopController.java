@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import model.AccountDAO;
 import model.AccountDTO;
 import model.OrderDAO;
 import model.ProductDAO;
@@ -49,6 +50,7 @@ public class ShopController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String action = (String) request.getAttribute("action");
         ProductDAO dao = new ProductDAO();
+        AccountDAO adao = new AccountDAO();
         OrderDAO odao = new OrderDAO();
         HttpSession session = request.getSession();
 
@@ -59,6 +61,9 @@ public class ShopController extends HttpServlet {
                     break;
                 case "product":
                     product(request, response, dao);
+                    break;
+                case "user":
+                    user(request, response, adao);
                     break;
                 case "revenue":
                     revenue(request, response, session, odao);
@@ -153,6 +158,35 @@ public class ShopController extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
         } else {
             request.setAttribute("product", product);
+            request.getRequestDispatcher(MAIN).forward(request, response);
+        }
+    }
+
+    private void user(HttpServletRequest request, HttpServletResponse response, AccountDAO dao)
+            throws SQLException, ServletException, IOException {
+        String id = request.getParameter("id");
+
+        AccountDTO account = dao.read(id);
+
+        if (account == null) {
+            request.setAttribute("error_message", "Something is wrong.");
+            response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
+        } else {
+            request.setAttribute("account", account);
+            request.getRequestDispatcher(MAIN).forward(request, response);
+        }
+    }
+
+    private void user(HttpServletRequest request, HttpServletResponse response, AccountDAO dao)
+            throws SQLException, ServletException, IOException {
+        String id = request.getParameter("id");
+
+        AccountDTO account = dao.read(id);
+        if (account == null) {
+            request.setAttribute("error_message", "Something is wrong.");
+            response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
+        } else {
+            request.setAttribute("account", account);
             request.getRequestDispatcher(MAIN).forward(request, response);
         }
     }

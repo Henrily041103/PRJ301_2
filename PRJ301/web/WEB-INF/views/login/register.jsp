@@ -36,15 +36,6 @@
                             <label class="form-label" for="pass">Retype Password </label>
                             <input name="repass"  type="password" id="pass" class="form-control" placeholder="Retype Password" required>          
                         </div>
-
-                        <div class="d-flex justify-content-between align-items-center">
-                            <!-- Checkbox -->
-                            <div class="form-group form-check">
-                                <input name="remember" value="1" type="checkbox" class="form-check-input" id="exampleCheck1">
-                                <label class="form-check-label" for="exampleCheck1">Remember me</label>
-                            </div>
-                        </div>
-
                         <div class="text-center text-lg-start mt-4 pt-2">
                             <button class="btn btn-success btn-block" type="submit"><i class="fas fa-sign-in-alt"></i>Sign up</button>
                             <p class="small fw-bold mt-2 pt-1 mb-0">Already have an account? <a href="<c:url value="/login/login.do"/>"
