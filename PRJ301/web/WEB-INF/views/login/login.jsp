@@ -38,6 +38,7 @@
                         </div>
 
                         <div class="text-center text-lg-start mt-4 pt-2">
+                            <c:if test="${error_message!=null}"><div class="alert alert-warning">${error_message}</div></c:if>
                             <button class="btn btn-success btn-block" type="submit"><i class="fas fa-sign-in-alt"></i>Sign in</button>
                             <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="<c:url value="/login/register.do"/>"
                                                                                               class="link-danger">Register</a></p>

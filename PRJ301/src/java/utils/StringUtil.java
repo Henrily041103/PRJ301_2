@@ -30,7 +30,7 @@ public class StringUtil {
         return nthLastIndexOf(--nth, ch, string.substring(0, string.lastIndexOf(ch)));
     }
 
-    public static String encryptPassword(String password) {
+    public static String hash(String password) {
         try {
             MessageDigest m = MessageDigest.getInstance("MD5");
             m.update(password.getBytes());

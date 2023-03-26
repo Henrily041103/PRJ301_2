@@ -6,106 +6,32 @@
 
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <a href="<c:url value="/product/create.do" />"><i class="bi bi-pencil-square"></i> Create</a>
-<c:if test="${current_user!= null && current_user.role=='ad'}">
-    <div class="row">
-        <div class="col">
-            <div class="mb-3 mt-3">
-                <label for="id" class="form-label">Product ID</label>
-                <input disabled type="text" class="form-control" placeholder="Product ID" name="proID" value="${product.proID}">
-            </div>
-            <div class="mb-3">
-                <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" placeholder="Product name" name="name" value="${product.name}">
-            </div>
-            <div class="mb-3">
-                <label for="brand" class="form-label">Brand</label>
-                <input type="text" class="form-control" placeholder="Product brand" name="proBrand" value="${product.proBrand}">
-            </div>
-            <div class="mb-3">
-                <label for="type" class="form-label">Type</label>
-                <input type="text" class="form-control" placeholder="Product type" name="proType" value="${product.proType}">
-            </div>
-            <div class="mb-3">
-                <label for="price" class="form-label">Price</label>
-                <input type="number" step="1" class="form-control" placeholder="Product type" name="price" value="${product.price}">
-            </div>   
-            <div class="mb-3">
-                <label for="sale" class="form-label">Sale</label>
-                <input type="number" step="0.1" class="form-control" placeholder="Product sale" name="sale" value="${product.sale}%">
-            </div>
-            <div class="mb-3">
-                <label for="stock" class="form-label">Stock</label>
-                <input type="number" step="1" class="form-control" placeholder="Product stock" name="stock" value="${product.stock}">
-            </div>
-            <div class="mb-3">
-                <label for="ageGroup" class="form-label">Age group</label>
-                <input type="number" step="1" class="form-control" placeholder="Product age group" name="ageGroup" value="${product.ageGroup}">
-            </div>
-            <div class="mb-3">
-                <label for="size" class="form-label">Size</label>
-                <input type="text" class="form-control" placeholder="Product size" name="size" value="${product.size}">
-            </div>
-            <div class="mb-3">
-                <label for="size" class="form-label">Color</label>
-                <input type="text" class="form-control" placeholder="Product color" name="color" value="${product.color}">
-            </div>
-            <button type="submit" class="btn btn-outline-success" name="op" value="update"><i class="bi bi-check-lg"></i> Update</button>
-            <button type="submit" class="btn btn-outline-danger" name="op" value="cancel"><i class="bi bi-x-lg"></i> Cancel</button>
-        </div>
-        <div class="col">
-            <img src="https://arc-anglerfish-arc2-prod-bostonglobe.s3.amazonaws.com/public/OHGTW7AZXYI6THMOPZS6ZC3G2A.jpg" class="img-fluid">
-        </div>
-    </div>
-</c:if>
-
 <c:if test="${current_user== null || current_user.role=='us'}">
-    <div class="row">
-        <div class="col">
-            <div class="mb-3 mt-3">
-                <label for="id" class="form-label">Product ID</label>
-                <input disabled type="text" class="form-control" placeholder="Product ID" name="proID" value="${product.proID}">
+    <div class="container" style = "margin-bottom: 10px">
+        <div class="row">
+            <div class="col-4">
+                <div class="container w-100" style="width: 50rem;">  
+                    <div class="card-container-pro"><img class="card-img-top" src="<c:url value="/images/${product.image}" />" /></div>
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="name" class="form-label">Name</label>
-                <input disabled type="text" class="form-control" placeholder="Product name" name="name" value="${product.name}">
+            <div class="col-4 card-body">
+                <h2 style="color: blue" class="card-title">${product.name}</h2>
+                <h3 style="margin-top:5px" class="id">Brand: ${product.proBrand}</h3>
+                <h3 style="margin-top:5px" class="id">Type: ${product.proType}</h3>            
+                <h3 style="margin-top:5px" class="id">Age Group: ${product.ageGroup}</h3>                                               
             </div>
-            <div class="mb-3">
-                <label for="brand" class="form-label">Brand</label>
-                <input disabled type="text" class="form-control" placeholder="Product brand" name="proBrand" value="${product.proBrand}">
+            <div class="col-4 card-body">
+                <c:if test="${product.size.trim()!=''}"><h3 style="margin-top:5px" class="id">Size: ${product.size}</h3></c:if>
+                <c:if test="${product.color.trim()!=''}">
+                    <h3 style="margin-top:5px; border: ${product.color}; border-style:solid; border-width: 7px" class="id">Color: ${product.color}</h3>             
+                </c:if>        
+                <h4 style="margin-top:5px" class="id">Stock: ${product.stock}</h4>
+                <h4 style="margin-top:5px" class="id">Price: ${product.price}</h4>  
+                <div class="mt-3 d-flex justify-content-between">   
+                    <a href='<c:url value='/shop/product.do?id=${product.proID}'/>' class='btn btn-outline-success'>Add to cart</a>
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="type" class="form-label">Type</label>
-                <input disabled type="text" class="form-control" placeholder="Product type" name="proType" value="${product.proType}">
-            </div>
-            <div class="mb-3">
-                <label for="price" class="form-label">Price</label>
-                <input disabled type="number" step="1" class="form-control" placeholder="Product type" name="price" value="${product.price}">
-            </div>   
-            <div class="mb-3">
-                <label for="sale" class="form-label">Sale</label>
-                <input disabled type="number" step="0.1" class="form-control" placeholder="Product sale" name="sale" value="${product.sale}%">
-            </div>
-            <div class="mb-3">
-                <label for="stock" class="form-label">Stock</label>
-                <input disabled type="number" step="1" class="form-control" placeholder="Product stock" name="stock" value="${product.stock}">
-            </div>
-            <div class="mb-3">
-                <label for="ageGroup" class="form-label">Age group</label>
-                <input disabled type="number" step="1" class="form-control" placeholder="Product age group" name="ageGroup" value="${product.ageGroup}">
-            </div>
-            <div class="mb-3">
-                <label for="size" class="form-label">Size</label>
-                <input disabled type="text" class="form-control" placeholder="Product size" name="size" value="${product.size}">
-            </div>
-            <div class="mb-3">
-                <label for="size" class="form-label">Color</label>
-                <input disabled type="text" class="form-control" placeholder="Product color" name="color" value="${product.color}">
-            </div>
-            <a class="btn btn-outline-danger" href="<c:url value="/shop/shop.do"/>">Return</a>
-        </div>
-        <div class="col">
-            <img src="https://arc-anglerfish-arc2-prod-bostonglobe.s3.amazonaws.com/public/OHGTW7AZXYI6THMOPZS6ZC3G2A.jpg" class="img-fluid">
-        </div>
+        </div>      
     </div>
 </c:if>
 
