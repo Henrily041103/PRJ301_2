@@ -63,42 +63,45 @@ public class CartController extends HttpServlet {
         try {
             switch (action) {
                 case "add":
-                    
                     add(request, response, cart, session, pdao);
                     response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
                     break;
-                case "show":
+                case "cart":
                     request.setAttribute("controller", CART_CONTROLLER);
                     request.setAttribute("action", CART);
                     request.getRequestDispatcher(MAIN).forward(request, response);
                     break;
 
                 case "buy_handler": //Luu thong tin vao db
-                    if (session.getAttribute("current-user") != null) {
-                        String op = request.getParameter("op");
-                        switch (op) {
-                            case "buy":
-                                buy(request, response, cart, session, pdao, odao);
-                                request.getRequestDispatcher(MAIN).forward(request, response);
-                                break;
-                            case "remove":
-                                remove(request, response, cart, session, pdao);
-                                response.sendRedirect(request.getContextPath() + "/" + CART_CONTROLLER + "/" + CART + ".do");
-                                break;
-                            case "empty":
-                                session.removeAttribute("cart");
-                                response.sendRedirect(request.getContextPath() + "/" + CART_CONTROLLER + "/" + CART + ".do");
-                            case "back":
-                                //Trở về trang chính shop
-                                response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
-                                break;
-                        }
-                    } else {
-                        response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
+                    String op = request.getParameter("op");
+                    switch (op) {
+                        case "remove":
+                            remove(request, response, cart, session, pdao);
+                            response.sendRedirect(request.getContextPath() + "/" + CART_CONTROLLER + "/" + CART + ".do");
+                            break;
+                        case "empty":
+                            session.removeAttribute("cart");
+                            response.sendRedirect(request.getContextPath() + "/" + CART_CONTROLLER + "/" + CART + ".do");
+                            break;
+                        case "back":
+                            //Trở về trang chính shop
+                            response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
+                            break;
+                        case "buy":
+                            buy(request, response, cart, session, pdao, odao);
+                            request.getRequestDispatcher(MAIN).forward(request, response);
+                            break;
+                        case "add":
+                            changeAmount(request, response, cart, session, pdao, 1);
+                            response.sendRedirect(request.getContextPath() + "/" + CART_CONTROLLER + "/" + CART + ".do");
+                            break;
+                        case "sub":
+                            changeAmount(request, response, cart, session, pdao, -1);
+                            response.sendRedirect(request.getContextPath() + "/" + CART_CONTROLLER + "/" + CART + ".do");
+                            break;
+                        default:
+                            throw new ServletException();
                     }
-                    break;
-                default:
-                    throw new ServletException();
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -116,7 +119,7 @@ public class CartController extends HttpServlet {
             HashMap<ProductDTO, Integer> cart, HttpSession session, ProductDAO pdao)
             throws ServletException, IOException, SQLException {
         String id = request.getParameter("proId");
-        int amount = request.getParameter("amount")!=null ? Integer.parseInt(request.getParameter("amount")) : 1;
+        int amount = request.getParameter("amount") != null ? Integer.parseInt(request.getParameter("amount")) : 1;
         ProductDTO prod = pdao.read(id);
         //check for existing product
         if (cart.containsKey(prod)) {
@@ -141,25 +144,43 @@ public class CartController extends HttpServlet {
     public void buy(HttpServletRequest request, HttpServletResponse response,
             HashMap<ProductDTO, Integer> cart, HttpSession session, ProductDAO pdao, OrderDAO odao)
             throws SQLException, ServletException, IOException {
-        pdao.lowerStock(cart); //stock amount - cart amount
-        long millis = System.currentTimeMillis();
-        Date today = new Date(millis);
+        if (cart.size() > 0) {
+            pdao.lowerStock(cart); //stock amount - cart amount
+            long millis = System.currentTimeMillis();
+            Date today = new Date(millis);
 
-        for (ProductDTO prod : cart.keySet()) {
-            OrderDTO order = new OrderDTO(StringUtil.getAlphaNumericString(9), prod.getProID(),
-                    ((AccountDTO) session.getAttribute("current_user")).getUserID(), cart.get(prod), today);
-            odao.create(order);
+            for (ProductDTO prod : cart.keySet()) {
+                OrderDTO order = new OrderDTO(StringUtil.getAlphaNumericString(9), prod.getProID(),
+                        ((AccountDTO) session.getAttribute("current_user")).getUserID(), cart.get(prod), today);
+                odao.create(order);
+            }
+            session.removeAttribute("cart");
+            request.setAttribute("order", cart);
+            request.setAttribute("controller", CART_CONTROLLER);
+            request.setAttribute("action", RECEIPT);
         }
-        session.removeAttribute("cart");
-        request.setAttribute("order", cart);
-        request.setAttribute("controller", CART_CONTROLLER);
-        request.setAttribute("action", RECEIPT);
+        else {
+            request.setAttribute("controller", CART_CONTROLLER);
+            request.setAttribute("action", RECEIPT);
+        }
+    }
+
+    private void changeAmount(HttpServletRequest request, HttpServletResponse response,
+            HashMap<ProductDTO, Integer> cart, HttpSession session, ProductDAO pdao, int amount)
+            throws ServletException, IOException, SQLException {
+        String id = request.getParameter("proId");
+        ProductDTO prod = pdao.read(id);
+        cart.put(prod, cart.get(prod) + amount);
+        if (cart.get(pdao.read(id)) <= 0) {
+            cart.remove(prod);
+        }
+        session.setAttribute("cart", cart);
     }
 
     public void remove(HttpServletRequest request, HttpServletResponse response,
             HashMap<ProductDTO, Integer> cart, HttpSession session, ProductDAO pdao)
             throws ServletException, IOException, SQLException {
-        String id = request.getParameter("productId");
+        String id = request.getParameter("proId");
         cart.remove(pdao.read(id));
         session.setAttribute("cart", cart);
     }
