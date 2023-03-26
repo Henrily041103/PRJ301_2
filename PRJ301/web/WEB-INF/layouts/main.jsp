@@ -44,12 +44,12 @@
                                     <c:if test="${action=='shop' || action==null}">
                                         <c:if test="${cart==null || cart.size==0}">
                                             <li class="cart">
-                                                <a class="nav-link active" href="<c:url value="/cart/show.do"/>">Cart</a>
+                                                <a class="nav-link active" href="<c:url value="/cart/cart.do"/>">Cart</a>
                                             </li>
                                         </c:if >
                                         <c:if test="${cart!=null && cart.size>0}">
                                             <li class="cart">
-                                                <a class="nav-link active" style="color:red" href="<c:url value="/cart/show.do"/>">Cart</a>
+                                                <a class="nav-link active" style="color:red" href="<c:url value="/cart/cart.do"/>">Cart</a>
                                             </li>
                                         </c:if >
                                     </c:if >
@@ -79,12 +79,12 @@
                                     <c:if test="${action=='shop' || action==null}">
                                         <c:if test="${cart==null || cart.size==0}">
                                             <li class="cart">
-                                                <a class="nav-link active" href="<c:url value="/cart/show.do"/>">Cart</a>
+                                                <a class="nav-link active" href="<c:url value="/cart/cart.do"/>">Cart</a>
                                             </li>
                                         </c:if >
                                         <c:if test="${cart!=null && cart.size>0}">
                                             <li class="cart">
-                                                <a class="nav-link active" style="color:red" href="<c:url value="/cart/show.do"/>">Cart</a>
+                                                <a class="nav-link active" style="color:red" href="<c:url value="/cart/cart.do"/>">Cart</a>
                                             </li>
                                         </c:if >
                                     </c:if >

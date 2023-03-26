@@ -28,7 +28,7 @@
                 <h3 style="margin-top:5px" class="id">Stock: ${product.stock}</h3>
                 <h3 style="margin-top:5px" class="id">Price: ${product.price}</h3>  
                 <div class="mt-3 d-flex justify-content-between">   
-                    <a href='<c:url value='/shop/product.do?id=${product.proID}'/>' class='btn btn-outline-success'>Add to cart</a>
+                    <a href='<c:url value='/cart/add.do?proId=${product.proID}'/>' class='btn btn-outline-success'>Add to cart</a>
                 </div>
                     <a href='<c:url value='/shop/shop.do'/>' class='btn btn-outline-danger' style="margin-top:5px">Cancel</a>
            </div>
