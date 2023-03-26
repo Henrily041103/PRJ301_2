@@ -67,6 +67,11 @@ public class CartController extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
                     break;
                 case "cart":
+                    int total = 0;
+                    for ( ProductDTO prod:cart.keySet()) {
+                        total += cart.get(prod)*prod.getPrice()*(100-prod.getSale())*0.01;
+                    }
+                    request.setAttribute("total", total);
                     request.setAttribute("controller", CART_CONTROLLER);
                     request.setAttribute("action", CART);
                     request.getRequestDispatcher(MAIN).forward(request, response);

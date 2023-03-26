@@ -37,7 +37,6 @@
             <button type="submit" class="btn btn-outline-success" name="op" value="create"><i class="bi bi-check-lg"></i> Create</button>
             <button type="submit" class="btn btn-outline-danger" name="op" value="cancel"><i class="bi bi-x-lg"></i> Cancel</button>
         </form>
-        <i style="color:red;">${message}</i>
     </div>
     <div class="col">
         <img src="<c:url value="/images/mickey.gif" />" alt=""/>
