@@ -79,6 +79,7 @@ public class ShopController extends HttpServlet {
                 case "create":
                     create(request, response, pdao);
                     break;
+                    
                 default:
                     throw new ServletException();
             }
@@ -253,7 +254,6 @@ public class ShopController extends HttpServlet {
         ProductDTO newProduct = new ProductDTO(id, brand, type, price, sale, stock, ageGroup, size, color, name);
         dao.create(newProduct);
         response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

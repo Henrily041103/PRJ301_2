@@ -26,32 +26,32 @@
                 <a href='<c:url value='/shop/shop.do'/>' class='btn btn-outline-danger'>Cancel</a>
             </div>
         </div>
-
-
     </div>    
-    <div class="col-8">   
-        <table class="table table-striped">
-            <tr>
-                <th>No</th>
-                <th>Bill date</th>
-                <th>Product name</th>
-                <th>Price</th>
-                <th>Amount</th>  
-                <th>Total</th>
-            </tr>
-            <c:forEach var="entry" items="${orders}" varStatus="loop">
+    <c:if test="${current_user.role=='us'}">   
+        <div class="col-8">   
+            <table class="table table-striped">
                 <tr>
-                    <td>${loop.count}</td>
-                    <td>${entry.key.billDate}</td>
-                    <td>${entry.value.name}</td>
-                    <td>${entry.value.price}</td>
-                    <td>${entry.key.amount}</td>
-                    <td>${(entry.value.price*(100-entry.value.sale))*0.01*entry.key.amount}</td>
+                    <th>No</th>
+                    <th>Bill date</th>
+                    <th>Product name</th>
+                    <th>Price</th>
+                    <th>Amount</th>  
+                    <th>Total</th>
                 </tr>
-            </c:forEach>
-        </table>
-        <h3>TOTAL: $${total}</h3>
-    </div>             
+                <c:forEach var="entry" items="${orders}" varStatus="loop">
+                    <tr>
+                        <td>${loop.count}</td>
+                        <td>${entry.key.billDate}</td>
+                        <td>${entry.value.name}</td>
+                        <td>${entry.value.price}</td>
+                        <td>${entry.key.amount}</td>
+                        <td>${(entry.value.price*(100-entry.value.sale))*0.01*entry.key.amount}</td>
+                    </tr>
+                </c:forEach>
+            </table>
+            <h3>TOTAL: $${total}</h3>
+        </div>
+    </c:if>
 </div>
 
 
