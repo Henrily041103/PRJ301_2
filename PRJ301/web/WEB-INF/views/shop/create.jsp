@@ -9,16 +9,17 @@
     <div class="col">
         <form action="<c:url value="/shop/create.do" />">
             <div class="mb-3 mt-3">
-                <label for="id" class="form-label">Id:</label>
-                <input type="text" class="form-control" id="id" placeholder="Product id" name="id" value="${product.proID}">
-            </div>
             <div class="mb-3 mt-3">
-                <label for="id" class="form-label">BRand:</label>
+                <label for="brand" class="form-label">Brand:</label>
                 <input type="text" class="form-control" id="brand" placeholder="Product brand" name="brand" value="${product.proBrand}">
             </div>
             <div class="mb-3">
-                <label for="brand" class="form-label">Name:</label>
+                <label for="name" class="form-label">Name:</label>
                 <input type="text" class="form-control" id="name" placeholder="Product name" name="name" value="${product.name}">
+            </div>
+            <div class="mb-3">
+                <label for="type" class="form-label">Type</label>
+                <input type="text" class="form-control" id="type" placeholder="Product type" name="type" value="${product.type}">
             </div>
             <div class="mb-3">
                 <label for="price" class="form-label">Price:</label>

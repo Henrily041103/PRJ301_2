@@ -55,7 +55,7 @@ public class ShopController extends HttpServlet {
         AccountDAO adao = new AccountDAO();
         OrderDAO odao = new OrderDAO();
         HttpSession session = request.getSession();
-
+       
         try {
             switch (action) {
                 case "shop":
@@ -77,8 +77,17 @@ public class ShopController extends HttpServlet {
                     edit(request, response, pdao);
                     break;
                 case "create":
-                    create(request, response, pdao);
-                    break;
+                    request.getRequestDispatcher(MAIN).forward(request, response);
+                case "create-handler":
+                    String op = request.getParameter("op");
+                    switch (op) {
+                        case "cancel":
+                            response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
+                            break;
+                        case "create":
+                            create(request, response, pdao);
+                            break;
+                    }
                 default:
                     throw new ServletException();
             }
@@ -239,13 +248,13 @@ public class ShopController extends HttpServlet {
 
     private void create(HttpServletRequest request, HttpServletResponse response, ProductDAO dao)
             throws SQLException, ServletException, IOException {
-        String id = request.getParameter("id");
         String name = request.getParameter("name");
         String brand = request.getParameter("brand");
         String type = request.getParameter("type");
         String size = request.getParameter("size");
         String color = request.getParameter("color");
-        String ageGroup = request.getParameter("ageRange");
+        String ageGroup = request.getParameter("ageGroup");
+        String id = StringUtil.getAlphaNumericString(10);
         double price = Double.parseDouble(request.getParameter("price"));
         double sale = Double.parseDouble(request.getParameter("sale"));
         int stock = Integer.parseInt(request.getParameter("stock"));
@@ -295,16 +304,4 @@ public class ShopController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
-    public String toUTF8(String isoString) {
-        String utf8String = null;
-        try {
-            byte[] stringBytesISO = isoString.getBytes("ISO-8859-1");
-            utf8String = new String(stringBytesISO, "UTF-8");
-        } catch (Exception e) {
-            System.out.println("UnsupportedEncodingException is: " + e.getMessage());
-            utf8String = isoString;
-        }
-        return utf8String;
-    }
 }

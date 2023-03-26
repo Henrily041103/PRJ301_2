@@ -117,15 +117,15 @@ public class ProductDAO {
         PreparedStatement stm = con.prepareStatement(CREATE);
 
         stm.setString(1, product.getProID());
-        stm.setString(2, product.getProBrand());
-        stm.setString(3, product.getProType());
-        stm.setFloat(4, (float) product.getPrice());
-        stm.setFloat(5, (float) product.getSale());
-        stm.setFloat(6, product.getStock());
-        stm.setString(7, product.getAgeGroup());
-        stm.setString(8, product.getSize());
-        stm.setString(9, product.getColor());
-        stm.setString(10, product.getName());
+        stm.setString(2, product.getName());
+        stm.setString(3, product.getProBrand());
+        stm.setString(4, product.getProType());
+        stm.setFloat(5, (float) product.getPrice());
+        stm.setFloat(6, (float) product.getSale());
+        stm.setFloat(7, product.getStock());
+        stm.setString(8, product.getAgeGroup());
+        stm.setString(9, product.getSize());
+        stm.setString(10, product.getColor());
 
         int count = stm.executeUpdate();
 
