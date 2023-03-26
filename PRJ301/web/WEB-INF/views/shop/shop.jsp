@@ -4,6 +4,7 @@
     Author     : Admin
 --%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <c:if test="${current_user.role=='us' || current_user==null}">
     <div class="container">
         <div class="row">
