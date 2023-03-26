@@ -10,6 +10,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.HashMap;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import model.AccountDAO;
 import model.AccountDTO;
 import model.OrderDAO;
+import model.OrderDTO;
 import model.ProductDAO;
 import model.ProductDTO;
 import utils.StringUtil;
@@ -49,7 +51,7 @@ public class ShopController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String action = (String) request.getAttribute("action");
-        ProductDAO dao = new ProductDAO();
+        ProductDAO pdao = new ProductDAO();
         AccountDAO adao = new AccountDAO();
         OrderDAO odao = new OrderDAO();
         HttpSession session = request.getSession();
@@ -57,13 +59,13 @@ public class ShopController extends HttpServlet {
         try {
             switch (action) {
                 case "shop":
-                    shop(request, response, session, dao);
+                    shop(request, response, session, pdao);
                     break;
                 case "product":
-                    product(request, response, dao);
+                    product(request, response, pdao);
                     break;
                 case "user":
-                    user(request, response, adao);
+                    user(request, response, adao, odao);
                     break;
                 case "revenue":
                     revenue(request, response, session, odao);
@@ -72,10 +74,10 @@ public class ShopController extends HttpServlet {
                     revenueHandler(request, response, odao);
                     break;
                 case "edit":
-                    edit(request, response, dao);
+                    edit(request, response, pdao);
                     break;
                 case "create":
-                    create(request, response, dao);
+                    create(request, response, pdao);
                     break;
                 default:
                     throw new ServletException();
@@ -106,17 +108,12 @@ public class ShopController extends HttpServlet {
         
         //search and sort
         List<ProductDTO> list1;
-        String search = "", sort = "";
+        String search = request.getParameter("search")==null? "":request.getParameter("search");
+        String sort = request.getParameter("sort")==null?"az":request.getParameter("sort");
         StringBuilder searchTerm = new StringBuilder();
-        if (request.getParameter("search") != null && !"".equals(request.getParameter("search").trim())) {
-            searchTerm.append("&search=").append(search);
-            search = request.getParameter("search");
-        }
         list1 = dao.select("%" + search + "%", stock);
-
-        if (request.getParameter("sort") != null && !"none".equals(request.getParameter("sort"))) {
-            sort = request.getParameter("sort");
-            searchTerm.append("&sort=").append(sort);
+        searchTerm.append("&sort=").append(sort);
+        searchTerm.append("&search=").append(search);
             switch (sort) {
                 case "az":
                     //sort here
@@ -128,7 +125,6 @@ public class ShopController extends HttpServlet {
                     //sort here
                     break;
             }
-        }
         
         //initiate rest of pagination
         int numOfPage = (int) Math.ceil(list1.size() / 8.0);
@@ -162,17 +158,20 @@ public class ShopController extends HttpServlet {
         }
     }
 
-    private void user(HttpServletRequest request, HttpServletResponse response, AccountDAO dao)
+    private void user(HttpServletRequest request, HttpServletResponse response, AccountDAO adao, OrderDAO odao)
             throws SQLException, ServletException, IOException {
         String id = request.getParameter("id");
 
-        AccountDTO account = dao.read(id);
+        AccountDTO account = adao.read(id);
+//        List<OrderDTO> orders = odao.getUserOrder(id);
+        HashMap<OrderDTO, ProductDTO> orders = odao.getUserOrder(id);
 
-        if (account == null) {
+        if (account == null || orders == null) {
             request.setAttribute("error_message", "Something is wrong.");
             response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
         } else {
             request.setAttribute("account", account);
+            request.setAttribute("orders", orders);
             request.getRequestDispatcher(MAIN).forward(request, response);
         }
     }
