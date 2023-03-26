@@ -39,17 +39,18 @@
                 <th>Amount</th>  
                 <th>Total</th>
             </tr>
-            <c:forEach var="toy" items="${list}" varStatus="loop">
+            <c:forEach var="entry" items="${orders}" varStatus="loop">
                 <tr>
                     <td>${loop.count}</td>
-                    <td>${order.billDate}</td>
-                    <td>${product.name}</td>
-                    <td>${product.price}</td>
-                    <td>${order.amount}</td>
-                    <td>$({product.price*product.sale)*0.01*amount}</td>
+                    <td>${entry.key.billDate}</td>
+                    <td>${entry.value.name}</td>
+                    <td>${entry.value.price}</td>
+                    <td>${entry.key.amount}</td>
+                    <td>${(entry.value.price*(100-entry.value.sale))*0.01*entry.key.amount}</td>
                 </tr>
             </c:forEach>
         </table>
+        <h3>TOTAL: $${total}</h3>
     </div>             
 </div>
 

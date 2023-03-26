@@ -98,14 +98,14 @@ public class ShopController extends HttpServlet {
             throws SQLException, ServletException, IOException {
         //get current page
         int pageNum = request.getParameter("page") == null ? 1 : Integer.parseInt(request.getParameter("page"));
-        
+
         //display unstocked items?
         int stock = 0;
         AccountDTO currentUser = (AccountDTO) session.getAttribute("current_user");
         if (currentUser != null && "us".equals(currentUser.getRole())) {
             stock = -1;
         }
-        
+
         //search and sort
         List<ProductDTO> list1 = null;
         String search = "", sort = "";
@@ -114,23 +114,22 @@ public class ShopController extends HttpServlet {
             search = request.getParameter("search");
             searchTerm.append("&search=").append(search);
             System.out.println(search);
-            list1 = dao.select("%" + search + "%", stock);       
-        }               
+            list1 = dao.select("%" + search + "%", stock);
+        }
         if (request.getParameter("sort") != null && !"none".equals(request.getParameter("sort"))) {
             sort = request.getParameter("sort");
             searchTerm.append("&sort=").append(sort);
             System.out.println(sort);
-            list1 = dao.select("%" + search + "%", stock, sort);  
-        }
-        else{
+            list1 = dao.select("%" + search + "%", stock, sort);
+        } else {
             list1 = dao.select("%" + search + "%", stock);
-        }       
+        }
         //initiate rest of pagination
         int numOfPage = (int) Math.ceil(list1.size() / 8.0);
         int start = (pageNum - 1) * 8 < list1.size() ? (pageNum - 1) * 8 : list1.size();
         int stop = pageNum * 8 < list1.size() ? pageNum * 8 : list1.size();
         List<ProductDTO> list = list1.subList(start, stop);
-        
+
         //send
         request.setAttribute("search_term", searchTerm.toString());
         request.setAttribute("search", search);
@@ -169,6 +168,11 @@ public class ShopController extends HttpServlet {
             request.setAttribute("error_message", "Something is wrong.");
             response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
         } else {
+            int total = 0;
+            for (OrderDTO order : orders.keySet()) {
+                total += order.getAmount() * orders.get(order).getPrice() * (100 - orders.get(order).getSale()) * 0.01;
+            }
+            request.setAttribute("total", total);
             request.setAttribute("account", account);
             request.setAttribute("orders", orders);
             request.getRequestDispatcher(MAIN).forward(request, response);
