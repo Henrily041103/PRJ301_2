@@ -185,7 +185,7 @@ public class ProductDAO {
         return count;
     }
 
-    public int delete(String id) throws SQLException {
+    public void delete(String id) throws SQLException {
         //Tạo connection để kết nối vào DBMS
         Connection con = DBUtils.getConnection();
         //Tạo đối tượng PreparedStatement
@@ -195,7 +195,6 @@ public class ProductDAO {
         int count = stm.executeUpdate();
         stm.close();
         con.close();
-        return count;
     }
 
     public int lowerStock(HashMap<ProductDTO, Integer> cart) throws SQLException {
