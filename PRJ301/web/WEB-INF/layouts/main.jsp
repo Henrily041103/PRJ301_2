@@ -52,10 +52,9 @@
                                                 <a class="nav-link active" style="color:red" href="<c:url value="/cart/show.do"/>">Cart</a>
                                             </li>
                                         </c:if >
-
-                                    </ul>
-                                </c:if>
-                            </c:if >
+                                    </c:if>
+                                </ul>
+                            </c:if>
 
                             <c:if test="${current_user!=null && current_user.role=='us'}">
                                 <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="font-size: 20px">
