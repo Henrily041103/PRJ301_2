@@ -105,31 +105,24 @@ public class ShopController extends HttpServlet {
         }
         
         //search and sort
-        List<ProductDTO> list1;
+        List<ProductDTO> list1 = null;
         String search = "", sort = "";
         StringBuilder searchTerm = new StringBuilder();
         if (request.getParameter("search") != null && !"".equals(request.getParameter("search").trim())) {
-            searchTerm.append("&search=").append(search);
             search = request.getParameter("search");
-        }
-        list1 = dao.select("%" + search + "%", stock);
-
+            searchTerm.append("&search=").append(search);
+            System.out.println(search);
+            list1 = dao.select("%" + search + "%", stock);       
+        }               
         if (request.getParameter("sort") != null && !"none".equals(request.getParameter("sort"))) {
             sort = request.getParameter("sort");
             searchTerm.append("&sort=").append(sort);
-            switch (sort) {
-                case "az":
-                    //sort here
-                    break;
-                case "asc":
-                    //sort here
-                    break;
-                case "desc":
-                    //sort here
-                    break;
-            }
+            System.out.println(sort);
+            list1 = dao.select("%" + search + "%", stock, sort);  
         }
-        
+        else{
+            list1 = dao.select("%" + search + "%", stock);
+        }       
         //initiate rest of pagination
         int numOfPage = (int) Math.ceil(list1.size() / 8.0);
         int start = (pageNum - 1) * 8 < list1.size() ? (pageNum - 1) * 8 : list1.size();
