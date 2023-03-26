@@ -4,6 +4,36 @@
     Author     : Admin
 --%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<div class="container">
+    <form class="d-flex" action="<c:url value="/shop/shop.do"/>">
+        <input class="col-1" type="checkbox" name="extend" id="extend" ${checked == 'on' ? 'checked' : ''} 
+               onclick="{
+                    var extend = document.getElementById('extend-search').style.display;
+                    if (extend === 'none') {
+                        document.getElementById('extend-search').style.display = 'block';
+                        document.getElementById('normal-search').style.display = 'none';
+                    } else {
+                        document.getElementById('extend-search').style.display = 'none';
+                        document.getElementById('normal-search').style.display = 'block';
+                    }
+                }">
+        <div class="col-3" id="normal-search" ${checked == 'on' ? 'style="display:none"' : ''}>
+            <input class="form-control me-2" type="text" name="search" id="search" placeholder="Search a product" value="${search_normal}" required>
+            <button class="btn btn-outline-success" type="submit">Search</button>
+            <select style="margin-left:10px" name="search_op" id="search_op">
+                <option value="name" ${param.search_op == 'name' ? 'selected' : ''}>Name</option>
+                <option value="brand" ${param.search_op == 'brand' ? 'selected' : ''}>Brand</option>
+                <option value="type" ${param.search_op == 'type' ? 'selected' : ''}>Type</option>
+                <option value="az" ${param.search_op == 'az' ? 'selected' : ''}>Name: A - Z</option>
+                <option value="asc" ${param.search_op == 'asc' ? 'selected' : ''}>Asc Price</option>
+                <option value="desc" ${param.search_op == 'desc' ? 'selected' : ''}>Desc Price</option>
+            </select>
+        </div>
+        <div class="col-9" id="extend-search" ${checked == 'on' ? '' : 'style="display:none"'}>A</div>
+    </form>
+</div>
+
+
 <c:if test="${current_user.role=='us' || current_user==null}">
     <div class="container">
         <div class="row">
@@ -43,7 +73,7 @@
                         Type: <input style="margin-top:5px" id="type" type="text" value="${product.proType}"></br>
                         Age Group: <input style="margin-top:5px" id="ageGroup" type="number" step = "1" value="${product.ageGroup}"></br>       
                         Stock: <input style="margin-top:5px" id="stock" type="number" value="${product.stock}"></br>
-                        
+
                         <c:if test="${product.color.trim()!=''}">Color: <input style="margin-top:5px" id="color" type="text" value="${product.color}"></br></c:if>   
                         <c:if test="${product.size.trim()!=''}">Size: <input style="margin-top:5px" id="size" type="text" value="${product.size}"></br></c:if>   
                         Price: <input style="margin-top:5px" id="price" type="float" value="${product.price}"></br>       

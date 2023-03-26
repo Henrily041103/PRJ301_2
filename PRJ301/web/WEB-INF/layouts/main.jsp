@@ -55,20 +55,6 @@
                                         </c:if >
 
                                     </ul>
-
-                                    <form class="d-flex" action="<c:url value="/shop/shop.do"/>">
-                                        <input class="form-control me-2" type="text" name="search" id="search" placeholder="Search a product" value="${search}">
-                                        <button class="btn btn-outline-success" type="submit">Search</button>
-                                        <select style="margin-left:10px" name="search_op" id="search_op">
-                                            <option value="name">Name</option>
-                                            <option value="brand">Brand</option>
-                                            <option value="type">Type</option>
-                                            <option value="az">Name: A - Z</option>
-                                            <option value="asc">Asc Price</option>
-                                            <option value="desc">Desc Price</option>
-                                        </select>
-                                        <button class="btn btn-outline-warning" style="margin-left: 10px" type="option">More</button>
-                                    </form>
                                 </c:if>
                             </c:if >
 
@@ -122,21 +108,6 @@
                                         <a class="nav-link active" style="color:red" href="<c:url value="/login/logout.do"/>">Logout</a>
                                     </li>                                    
                                 </ul>
-                                <c:if test="${action=='shop' || action==null}">
-                                    <form class="d-flex" action="<c:url value="/shop/shop.do"/>">
-                                        <input class="form-control me-2" type="text" name="search" id="search" placeholder="Search a product" value="${search}" value="${param.search}>
-                                        <button class="btn btn-outline-success" type="submit">Search</button>
-                                        <select style="margin-left:10px" name="search_op" id="search_op">
-                                            <option value="name">Name</option>
-                                            <option value="brand">Brand</option>
-                                            <option value="type">Type</option>
-                                            <option value="az">Name: A - Z</option>
-                                            <option value="asc">Asc Price</option>
-                                            <option value="desc">Desc Price</option>
-                                        </select>
-                                        <button class="btn btn-outline-warning" style="margin-left: 10px" type="option">More</button>
-                                    </form>
-                                </c:if>
                             </c:if >
 
                         </div>

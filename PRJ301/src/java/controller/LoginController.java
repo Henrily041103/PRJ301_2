@@ -87,7 +87,7 @@ public class LoginController extends HttpServlet {
     private void login(HttpServletRequest request, HttpServletResponse response, HttpSession session, AccountDAO dao)
             throws SQLException, ServletException, IOException {
         String username = request.getParameter("user");
-        String password = StringUtil.hash(request.getParameter("pass") + username);
+        String password = request.getParameter("pass");
 
         //TODO: check validity of password
         AccountDTO account = dao.login(username, password);
@@ -107,8 +107,8 @@ public class LoginController extends HttpServlet {
     private void register(HttpServletRequest request, HttpServletResponse response, HttpSession session, AccountDAO dao)
             throws SQLException, ServletException, IOException {
         String username = request.getParameter("user");
-        String password = StringUtil.hash(request.getParameter("pass") + username);
-        String repass = StringUtil.hash(request.getParameter("repass") + username);
+        String password = request.getParameter("pass");
+        String repass = request.getParameter("repass");
         String email = request.getParameter("email");
 
         if (repass.equals(password)) {
