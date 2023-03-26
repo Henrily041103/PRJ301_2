@@ -55,17 +55,13 @@ public class ShopController extends HttpServlet {
         try {
             switch (action) {
                 case "shop":
-                    String search = request.getParameter("search");
-                    String search_op = request.getParameter("search_op");
-                    shop(request, response, session, dao, search, search_op);
-                    request.getRequestDispatcher(MAIN).forward(request, response);
+                    shop(request, response, session, dao);
                     break;
                 case "product":
                     product(request, response, dao);
                     break;
                 case "revenue":
-                    revenue(session, odao);
-                    request.getRequestDispatcher(MAIN).forward(request, response);
+                    revenue(request, response, session, odao);
                     break;
                 case "revenue-handler":
                     revenueHandler(request, response, odao);
@@ -91,112 +87,59 @@ public class ShopController extends HttpServlet {
         }
     }
 
-    private void shop(HttpServletRequest request, HttpServletResponse response, HttpSession session, ProductDAO dao, String search, String search_op)
+    private void shop(HttpServletRequest request, HttpServletResponse response, HttpSession session, ProductDAO dao)
             throws SQLException, ServletException, IOException {
-        ProductDTO selector = null;
+        //get current page
         int pageNum = request.getParameter("page") == null ? 1 : Integer.parseInt(request.getParameter("page"));
-
+        
+        //display unstocked items?
         int stock = 0;
         AccountDTO currentUser = (AccountDTO) session.getAttribute("current_user");
         if (currentUser != null && "us".equals(currentUser.getRole())) {
             stock = -1;
         }
-
-        List<ProductDTO> list1 = new ArrayList();
-        String extend = request.getParameter("extend");
+        
+        //search and sort
+        List<ProductDTO> list1;
+        String search = "", sort = "";
         StringBuilder searchTerm = new StringBuilder();
-        if (extend != null) searchTerm.append("&checked=").append(extend);
-        //use extended search
-        if (extend != null && extend.equals("on")) {
-            System.out.println("extended search");
-            String name = request.getParameter("name") == null ? "" : request.getParameter("name");
-            String brand = request.getParameter("brand") == null ? "" : request.getParameter("brand");
-            String type = request.getParameter("type") == null ? "" : request.getParameter("type");
-            String size = request.getParameter("size") == null ? "" : request.getParameter("size");
-            String color = request.getParameter("color") == null ? "" : request.getParameter("color");
-            String max = request.getParameter("max") == null ? "12" : request.getParameter("max");
-            String min = request.getParameter("min") == null ? "0" : request.getParameter("min");
-            double price = request.getParameter("price") == null ? 10000 : Double.parseDouble(request.getParameter("price"));
-            double sale = request.getParameter("sale") == null ? 0 : Double.parseDouble(request.getParameter("sale"));
+        if (request.getParameter("search") != null && !"".equals(request.getParameter("search").trim())) {
+            searchTerm.append("&search=").append(search);
+            search = request.getParameter("search");
+        }
+        list1 = dao.select("%" + search + "%", stock);
 
-            selector = new ProductDTO("", brand, type, price, sale, stock, "", size, color, name);
-            list1 = dao.select(selector, max, min);
-
-            if (!name.equals("")) {
-                searchTerm.append("&name=").append(name);
-            }
-            if (!brand.equals("")) {
-                searchTerm.append("&brand=").append(brand);
-            }
-            if (!type.equals("")) {
-                searchTerm.append("&type=").append(type);
-            }
-            if (!size.equals("")) {
-                searchTerm.append("&size=").append(size);
-            }
-            if (!color.equals("")) {
-                searchTerm.append("&color=").append(color);
-            }
-            if (!max.equals("12")) {
-                searchTerm.append("&max=").append(max);
-            }
-            if (!min.equals("0")) {
-                searchTerm.append("&min=").append(min);
-            }
-            if (price < 10000) {
-                searchTerm.append("&price=").append(price);
-            }
-            if (sale > 0) {
-                searchTerm.append("&sale=").append(sale);
-            }
-        } //do not use extended search
-        else {
-            //normal search
-            if (search_op != null && search != null && !"".equals(search.trim()) && !"none".equals(search_op.trim())) {
-                searchTerm.append("&search_op=").append(search_op);
-                searchTerm.append("&search=").append(search);
-                request.setAttribute("search_normal", search);
-                System.out.println("normal search: " + search);
-                switch (search_op) {
-                    case "name":
-                        selector = new ProductDTO("", "", "", 10000, 0, stock, "", "", "", search);
-                        break;
-                    case "brand":
-                        selector = new ProductDTO("", search, "", 10000, 0, stock, "", "", "", "");
-                        break;
-                    case "type":
-                        selector = new ProductDTO("", "", search, 10000, 0, stock, "", "", "", "");
-                        break;
-                    case "az":
-                        selector = new ProductDTO("", "", "", 10000, 0, stock, "", "", "", search);
-                        //sort
-                        break;
-                    case "asc":
-                        selector = new ProductDTO("", "", "", 10000, 0, stock, "", "", "", search);
-                        //sort
-                        break;
-                    case "desc":
-                        selector = new ProductDTO("", "", "", 10000, 0, stock, "", "", "", search);
-                        //sort
-                        break;
-                }  
-                list1 = dao.select(selector, "12", "0");
-            }
-            else { //no search at all
-                System.out.println("no search");
-                selector = new ProductDTO("", "", "", 10000, 0, stock, "", "", "", "");
-                list1 = dao.select(selector, "12", "0");
+        if (request.getParameter("sort") != null && !"none".equals(request.getParameter("sort"))) {
+            sort = request.getParameter("sort");
+            searchTerm.append("&sort=").append(sort);
+            switch (sort) {
+                case "az":
+                    //sort here
+                    break;
+                case "asc":
+                    //sort here
+                    break;
+                case "desc":
+                    //sort here
+                    break;
             }
         }
-
+        
+        //initiate rest of pagination
         int numOfPage = (int) Math.ceil(list1.size() / 8.0);
-        int start = (pageNum - 1) * 8 < list1.size()? (pageNum - 1) * 8 : list1.size();
+        int start = (pageNum - 1) * 8 < list1.size() ? (pageNum - 1) * 8 : list1.size();
         int stop = pageNum * 8 < list1.size() ? pageNum * 8 : list1.size();
         List<ProductDTO> list = list1.subList(start, stop);
-        request.setAttribute("search", searchTerm.toString());
+        
+        //send
+        request.setAttribute("search_term", searchTerm.toString());
+        request.setAttribute("search", search);
+        request.setAttribute("sort", sort);
+
         request.setAttribute("numOfPage", numOfPage);
         request.setAttribute("pageNum", pageNum);
         request.setAttribute("list", list);
+        request.getRequestDispatcher(MAIN).forward(request, response);
     }
 
     private void product(HttpServletRequest request, HttpServletResponse response, ProductDAO dao)
@@ -214,7 +157,7 @@ public class ShopController extends HttpServlet {
         }
     }
 
-    private void revenue(HttpSession session, OrderDAO dao)
+    private void revenue(HttpServletRequest request, HttpServletResponse response, HttpSession session, OrderDAO dao)
             throws SQLException, ServletException, IOException {
         if (session.getAttribute("brand_list") == null) {
             List<String> brandList = dao.getOrderBrands();
@@ -224,6 +167,7 @@ public class ShopController extends HttpServlet {
             List<Integer> yearList = dao.getOrderYears();
             session.setAttribute("year_list", yearList);
         }
+        request.getRequestDispatcher(MAIN).forward(request, response);
     }
 
     private void revenueHandler(HttpServletRequest request, HttpServletResponse response, OrderDAO dao)
@@ -233,9 +177,6 @@ public class ShopController extends HttpServlet {
         int q1 = dao.revenue(brand, Date.valueOf(year + "-05-01"), Date.valueOf(year + "-01-01"));
         int q2 = dao.revenue(brand, Date.valueOf(year + "-09-01"), Date.valueOf(year + "-05-01"));
         int q3 = dao.revenue(brand, Date.valueOf(year + "-12-31"), Date.valueOf(year + "-09-01"));
-//        System.out.println("q1: " + q1);
-//        System.out.println("q2: " + q2);
-//        System.out.println("q3: " + q3);
 
         request.setAttribute("q1", q1);
         request.setAttribute("q2", q2);
