@@ -67,6 +67,11 @@ public class CartController extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
                     break;
                 case "cart":
+                    int total = 0;
+                    for ( ProductDTO prod:cart.keySet()) {
+                        total += cart.get(prod)*prod.getPrice()*(100-prod.getSale())*0.01;
+                    }
+                    request.setAttribute("total", total);
                     request.setAttribute("controller", CART_CONTROLLER);
                     request.setAttribute("action", CART);
                     request.getRequestDispatcher(MAIN).forward(request, response);
@@ -148,14 +153,16 @@ public class CartController extends HttpServlet {
             pdao.lowerStock(cart); //stock amount - cart amount
             long millis = System.currentTimeMillis();
             Date today = new Date(millis);
+            List<OrderDTO> orders = new ArrayList();
 
             for (ProductDTO prod : cart.keySet()) {
                 OrderDTO order = new OrderDTO(StringUtil.getAlphaNumericString(9), prod.getProID(),
                         ((AccountDTO) session.getAttribute("current_user")).getUserID(), cart.get(prod), today);
                 odao.create(order);
+                orders.add(order);
             }
             session.removeAttribute("cart");
-            request.setAttribute("order", cart);
+            request.setAttribute("orders", orders);
             request.setAttribute("controller", CART_CONTROLLER);
             request.setAttribute("action", RECEIPT);
         }

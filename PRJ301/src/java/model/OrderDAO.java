@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import utils.DBUtils;
 
@@ -23,6 +24,7 @@ public class OrderDAO {
     private static final String REVENUE = "select Totals.ProBrand, sum(Totals.Total) as TotalAll from (select OrderID, tblOrder.ProID, ProBrand, BillDate, (Price*(100-Sale)*0.01*Amount) as Total from tblOrder left outer join Product on tblOrder.ProID = Product.ProID where BillDate between ? and ?) as Totals group by ProBrand having Totals.ProBrand like ?";
     private static final String BRAND = "select distinct ProBrand from tblOrder left outer join Product on tblOrder.ProID = Product.ProID ";
     private static final String YEAR = "select distinct datepart(yyyy, BillDate) as year from tblOrder ";
+    private static final String USER_ORDER = "select orderId, amount, tblOrder.proId, userId,billDate, ProName, ProBrand, ProType, Price, SAle, Stock, AgeGroup,Size,Color from tblOrder left outer join Product on tblOrder.proId=Product.ProId where tblOrder.userId = ?";
     
     private static final String SELECT = "select * from tblOrder";
     private static final String READ = "select * from tblOrder where OrderID = ?";
@@ -178,5 +180,44 @@ public class OrderDAO {
         con.close();
 
         return years;
+    }
+    public HashMap<OrderDTO, ProductDTO> getUserOrder(String userID) throws SQLException {
+        Connection con = DBUtils.getConnection();
+        HashMap<OrderDTO, ProductDTO> orders = new HashMap();
+        
+//        List<OrderDTO> orders = new ArrayList();
+        PreparedStatement stm = con.prepareStatement(USER_ORDER);
+        stm.setString(1, userID);
+        ResultSet rs = stm.executeQuery();
+
+        while (rs.next()) {
+            OrderDTO order = new OrderDTO();
+            ProductDTO product = new ProductDTO();
+            
+            order.setUserID(rs.getString("UserID"));
+            order.setProID(rs.getString("ProID"));
+            order.setOrderID(rs.getString("OrderID"));
+            order.setAmount(rs.getInt("Amount"));
+            order.setBillDate(rs.getDate("BillDate"));
+            
+            product.setProID(rs.getString("ProId"));
+            product.setProBrand(rs.getString("ProBrand"));
+            product.setProType(rs.getString("ProType"));
+            product.setPrice(rs.getDouble("price"));
+            product.setSale(rs.getInt("sale"));
+            product.setStock(rs.getInt("stock"));
+            product.setAgeGroup(rs.getString("ageGroup"));
+            product.setSize(rs.getString("size"));
+            product.setColor(rs.getString("color"));
+            product.setName(rs.getString("ProName"));
+            
+            orders.put(order,product);
+        }
+
+        rs.close();
+        stm.close();
+        con.close();
+
+        return orders;
     }
 }
