@@ -89,7 +89,7 @@ public class CartController extends HttpServlet {
                             break;
                         case "buy":
                             buy(request, response, cart, session, pdao, odao);
-                            request.getRequestDispatcher(MAIN).forward(request, response);
+                            response.sendRedirect(request.getContextPath() + "/" + CART_CONTROLLER + "/" + RECEIPT + ".do");
                             break;
                         case "add":
                             changeAmount(request, response, cart, session, pdao, 1);
@@ -102,6 +102,9 @@ public class CartController extends HttpServlet {
                         default:
                             throw new ServletException();
                     }
+                case "receipt":
+                    
+                    break;
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
