@@ -248,7 +248,7 @@ public class ShopController extends HttpServlet {
         String ageGroup = request.getParameter("ageRange");
         double price = Double.parseDouble(request.getParameter("price"));
         double sale = Double.parseDouble(request.getParameter("sale"));
-        int stock = Integer.parseInt(request.getParameter("sale"));
+        int stock = Integer.parseInt(request.getParameter("stock"));
 
         ProductDTO newProduct = new ProductDTO(id, brand, type, price, sale, stock, ageGroup, size, color, name);
         dao.create(newProduct);
