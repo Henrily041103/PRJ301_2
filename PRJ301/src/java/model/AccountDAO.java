@@ -20,14 +20,14 @@ import utils.DBUtils;
  */
 public class AccountDAO {
 
-    private static final String REGISTER = "SELECT * FROM bbs.dbo.tblUser WHERE Email like ?";
-    private static final String LOGIN = "SELECT userId, role, Email, Phone, UserAddress FROM bbs.dbo.tblUser WHERE username = ? AND password = ?";
+    private static final String REGISTER = "SELECT * FROM tblUser WHERE Email like ?";
+    private static final String LOGIN = "SELECT userId, role, Email, Phone, UserAddress FROM tblUser WHERE username = ? AND password = ?";
 
-    private static final String READ = "SELECT * FROM bbs.dbo.tblUser WHERE UserID like ?";
-    private static final String DELETE = "DELETE FROM bbs.dbo.tblUser WHERE UserID = ?";
-    private static final String UPDATE = "UPDATE bbs.dbo.tblUser SET username=?, password=?, Email=?, Phone=?, UserAddress=? WHERE userID = ?";
-    private static final String INSERT = "INSERT INTO bbs.dbo.tblUser(userID, username, password, role, Email, Phone, UserAddress) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    private static final String SELECT = "SELECT * FROM bbs.dbo.tblUser";
+    private static final String READ = "SELECT * FROM tblUser WHERE UserID like ?";
+    private static final String DELETE = "DELETE FROM tblUser WHERE UserID = ?";
+    private static final String UPDATE = "UPDATE tblUser SET username=?, password=?, Email=?, Phone=?, UserAddress=? WHERE userID = ?";
+    private static final String INSERT = "INSERT INTO tblUser(userID, username, password, role, Email, Phone, UserAddress) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private static final String SELECT = "SELECT * FROM tblUser";
 
     public List<AccountDTO> select() throws SQLException {
         Connection con = DBUtils.getConnection();

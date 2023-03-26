@@ -5,7 +5,7 @@
 --%>
 
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<a href="<c:url value="/product/create.do" />"><i class="bi bi-pencil-square"></i> Create</a>
+
 <c:if test="${current_user== null || current_user.role=='us'}">
     <div class="container" style = "margin-bottom: 10px">
         <div class="row">

@@ -62,6 +62,7 @@
 </c:if>
 
 <c:if test="${current_user.role=='ad'}">
+    <a href="<c:url value="/product/create.do" />"><i class="bi bi-pencil-square"></i> Create</a>
     <div class="row">
         <c:forEach var="product" items="${list}" varStatus="loop">
             <div class="col-md-3 my-3">
