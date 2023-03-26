@@ -94,7 +94,7 @@ public class CartController extends HttpServlet {
                             break;
                         case "buy":
                             buy(request, response, cart, session, pdao, odao);
-                            request.getRequestDispatcher(MAIN).forward(request, response);
+
                             break;
                         case "add":
                             changeAmount(request, response, cart, session, pdao, 1);
@@ -165,10 +165,10 @@ public class CartController extends HttpServlet {
             request.setAttribute("orders", orders);
             request.setAttribute("controller", CART_CONTROLLER);
             request.setAttribute("action", RECEIPT);
-        }
-        else {
-            request.setAttribute("controller", CART_CONTROLLER);
-            request.setAttribute("action", RECEIPT);
+            request.getRequestDispatcher(MAIN).forward(request, response);
+        } else {
+            request.setAttribute("controller", SHOP_CONTROLLER);
+            request.setAttribute("action", SHOP);
         }
     }
 
