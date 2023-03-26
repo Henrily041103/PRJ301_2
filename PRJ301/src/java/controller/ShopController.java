@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import model.AccountDAO;
 import model.AccountDTO;
 import model.OrderDAO;
 import model.ProductDAO;
@@ -49,6 +50,7 @@ public class ShopController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String action = (String) request.getAttribute("action");
         ProductDAO dao = new ProductDAO();
+        AccountDAO adao = new AccountDAO();
         OrderDAO odao = new OrderDAO();
         HttpSession session = request.getSession();
 
@@ -62,6 +64,9 @@ public class ShopController extends HttpServlet {
                     break;
                 case "product":
                     product(request, response, dao);
+                    break;
+                case "user":
+                    user(request, response, adao);
                     break;
                 case "revenue":
                     revenue(session, odao);
@@ -105,7 +110,9 @@ public class ShopController extends HttpServlet {
         List<ProductDTO> list1 = new ArrayList();
         String extend = request.getParameter("extend");
         StringBuilder searchTerm = new StringBuilder();
-        if (extend != null) searchTerm.append("&checked=").append(extend);
+        if (extend != null) {
+            searchTerm.append("&checked=").append(extend);
+        }
         //use extended search
         if (extend != null && extend.equals("on")) {
             System.out.println("extended search");
@@ -179,10 +186,9 @@ public class ShopController extends HttpServlet {
                         selector = new ProductDTO("", "", "", 10000, 0, stock, "", "", "", search);
                         //sort
                         break;
-                }  
+                }
                 list1 = dao.select(selector, "12", "0");
-            }
-            else { //no search at all
+            } else { //no search at all
                 System.out.println("no search");
                 selector = new ProductDTO("", "", "", 10000, 0, stock, "", "", "", "");
                 list1 = dao.select(selector, "12", "0");
@@ -190,7 +196,7 @@ public class ShopController extends HttpServlet {
         }
 
         int numOfPage = (int) Math.ceil(list1.size() / 8.0);
-        int start = (pageNum - 1) * 8 < list1.size()? (pageNum - 1) * 8 : list1.size();
+        int start = (pageNum - 1) * 8 < list1.size() ? (pageNum - 1) * 8 : list1.size();
         int stop = pageNum * 8 < list1.size() ? pageNum * 8 : list1.size();
         List<ProductDTO> list = list1.subList(start, stop);
         request.setAttribute("search", searchTerm.toString());
@@ -210,6 +216,21 @@ public class ShopController extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
         } else {
             request.setAttribute("product", product);
+            request.getRequestDispatcher(MAIN).forward(request, response);
+        }
+    }
+
+    private void user(HttpServletRequest request, HttpServletResponse response, AccountDAO dao)
+            throws SQLException, ServletException, IOException {
+        String id = request.getParameter("id");
+
+        AccountDTO account = dao.read(id);
+
+        if (account == null) {
+            request.setAttribute("error_message", "Something is wrong.");
+            response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
+        } else {
+            request.setAttribute("account", account);
             request.getRequestDispatcher(MAIN).forward(request, response);
         }
     }

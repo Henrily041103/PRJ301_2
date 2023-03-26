@@ -43,3 +43,27 @@ and open the template in the editor.
     width: 300px;
     margin-bottom: 20px;
 }
+
+.home{
+    font-size: 25px; 
+    margin-left: 5px;
+}
+
+.login{
+    font-size: 25px; 
+    margin-left: 5px;
+}
+
+.cart{
+    font-size: 25px; 
+    margin-left: 5px;
+}
+
+.revenue{
+    font-size: 25px; 
+    margin-left: 5px;
+}
+
+.search{
+    margin-top: 9px
+}

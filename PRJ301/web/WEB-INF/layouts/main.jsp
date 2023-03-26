@@ -29,9 +29,11 @@
                         <a class="navbar-brand" href="<c:url value="/shop/shop.do"/>">
                             <img src="<c:url value="/images/logo.png"/>"/></a>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            
+<!--                            IF NOT LOGGED IN-->
                             <c:if test="${current_user==null}"> 
                                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                                    <li class="home">
+                                    <li class="home" >
                                         <a class="nav-link active" href="<c:url value="/shop/shop.do"/>">Home</a>
                                     </li>
                                     <c:if test="${action!='login'}">
@@ -52,7 +54,7 @@
                                         </c:if >
                                     </c:if >
                                     <c:if test="${action=='shop' || action==null}">
-                                        <li>
+                                        <li class="search">
                                             <form class="d-flex" action="<c:url value="/shop/shop.do"/>">
                                                 <button class="btn btn-outline" type="submit" style="margin-right: 1px"><i class="bi bi-search"></i></button>
                                                 <input class="form-control me-2" type="text" name="search" id="search" placeholder="Search a product" value="${param.search}">
@@ -66,16 +68,13 @@
                                         </li>
                                     </c:if>
                                 </ul>
-                                Welcome ${current_user}
                             </c:if >
-
+                            
+<!--                           IF USER IS A USER-->
                             <c:if test="${current_user!=null && current_user.role=='us'}">
                                 <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="font-size: 20px">
                                     <li class="home">
                                         <a class="nav-link active" href="<c:url value="/shop/shop.do"/>">Home</a>
-                                    </li>
-                                    <li class="logout">
-                                        <a class="nav-link active" style="color:red" href="<c:url value="/login/logout.do"/>">Logout</a>
                                     </li>
                                     <c:if test="${action=='shop' || action==null}">
                                         <c:if test="${cart==null || cart.size==0}">
@@ -90,51 +89,75 @@
                                         </c:if >
                                     </c:if >
                                     <c:if test="${action=='shop' || action==null}">
-                                        <form class="d-flex" action="<c:url value="/shop/shop.do"/>">
-                                            <button class="btn btn-outline" type="submit" style="margin-right: 1px"><i class="bi bi-search"></i></button>
-                                            <input class="form-control me-2" type="text" name="search" id="search" placeholder="Search a product" value="${param.search}">
-                                            <select class="form-control" style="margin-left:10px" name="search_op" id="search_op" >
-                                                <option value="az">Name: A - Z</option>
-                                                <option value="za">Name: Z - A</option>
-                                                <option value="asc">Asc Price</option>
-                                                <option value="desc">Desc Price</option>
-                                            </select>                    
-                                        </form>    
+                                        <li class="search">
+                                            <form class="d-flex" action="<c:url value="/shop/shop.do"/>">
+                                                <button class="btn btn-outline" type="submit" style="margin-right: 1px"><i class="bi bi-search"></i></button>
+                                                <input class="form-control me-2" type="text" name="search" id="search" placeholder="Search a product" value="${param.search}">
+                                                <select class="form-control" style="margin-left:10px" name="search_op" id="search_op">
+                                                    <option value="az">Name: A - Z</option>
+                                                    <option value="za">Name: Z - A</option>
+                                                    <option value="asc">Asc Price</option>
+                                                    <option value="desc">Desc Price</option>
+                                                </select>                    
+                                            </form>
+                                        </li>
                                     </c:if>
                                 </ul>
-
+                                <div class="btn-group">
+                                    <button style="font-weight:bold; color:black" type="button" class="btn btn-outline-info dropdown-toggle" data-bs-toggle="dropdown">
+                                        ${current_user.username}
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="<c:url value="/shop/user.do?id=${current_user.userID}"/>">Change info</a></li>
+                                        <li><a class="dropdown-item" href="#">Order history</a></li>
+                                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="<c:url value="/login/logout.do"/>">Logout</a></li>
+                                    </ul>
+                                </div>
                             </c:if >
-
+                            
+<!--                            IF USER IS AN ADMIN-->
                             <c:if test="${current_user!= null && current_user.role=='ad'}">
-                                <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="font-size: 20px">
+                                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                                     <li class="home">
                                         <a class="nav-link active" href="<c:url value="/shop/shop.do"/>">Home</a>
                                     </li>
                                     <li class="revenue">
                                         <a class="nav-link active" href="<c:url value="/shop/revenue.do"/>">Revenue</a>
                                     </li>
-                                    <li class="logout">
-                                        <a class="nav-link active" style="color:red" href="<c:url value="/login/logout.do"/>">Logout</a>
-                                    </li>  
                                     <c:if test="${action=='shop' || action==null}">
-                                        <form class="d-flex" action="<c:url value="/shop/shop.do"/>">
-                                            <button class="btn btn-outline" type="submit" style="margin-right: 1px"><i class="bi bi-search"></i></button>
-                                            <input class="form-control me-2" type="text" name="search" id="search" placeholder="Search a product" value="${param.search}">
-                                            <select class="form-control" style="margin-left:10px" name="search_op" id="search_op" >
-                                                <option value="az">Name: A - Z</option>
-                                                <option value="za">Name: Z - A</option>
-                                                <option value="asc">Asc Price</option>
-                                                <option value="desc">Desc Price</option>
-                                            </select>                    
-                                        </form>      
+                                        <li class="search">
+                                            <form class="d-flex" action="<c:url value="/shop/shop.do"/>">
+                                                <button class="btn btn-outline" type="submit" style="margin-right: 1px"><i class="bi bi-search"></i></button>
+                                                <input class="form-control me-2" type="text" name="search" id="search" placeholder="Search a product" value="${param.search}">
+                                                <select class="form-control" style="margin-left:10px" name="search_op" id="search_op">
+                                                    <option value="az">Name: A - Z</option>
+                                                    <option value="za">Name: Z - A</option>
+                                                    <option value="asc">Asc Price</option>
+                                                    <option value="desc">Desc Price</option>
+                                                </select>                    
+                                            </form>
+                                        </li>
                                     </c:if>
                                 </ul>
-
+                                <div class="btn-group">
+                                    <button style="font-weight:bold; color:black" type="button" class="btn btn-outline-info dropdown-toggle" data-bs-toggle="dropdown">
+                                        ${current_user.username}
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="<c:url value="/shop/user.do?id=${current_user.userID}"/>">Change info</a></li>
+                                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="<c:url value="/login/logout.do"/>">Logout</a></li>
+                                    </ul>
+                                </div>
                             </c:if >
                         </div>
                     </div>
                 </nav>
             </div>
+                        
             <!--view-->
             <div class="row content">
                 <div class="col">
@@ -145,7 +168,7 @@
             <!--footer-->
             <div class="row footer">
                 <div class="col">
-                    Copyright &copy; by Nhóm 三人だけ
+                    Copyright &copy; by Nhóm 三人だけだ
                 </div>
             </div>            
         </div>
