@@ -44,12 +44,12 @@
                                     <c:if test="${action=='shop' || action==null}">
                                         <c:if test="${cart==null || cart.size==0}">
                                             <li class="cart">
-                                                <a class="nav-link active" href="<c:url value="/cart/cart.do"/>">Cart</a>
+                                                <a class="nav-link active" href="<c:url value="/cart/cart.do"/>"><i class="bi bi-cart3"></i>Cart</a>
                                             </li>
                                         </c:if >
-                                        <c:if test="${cart!=null && cart.size>0}">
+                                        <c:if test="${cart!=null && cart.size!=0}">
                                             <li class="cart">
-                                                <a class="nav-link active" style="color:red" href="<c:url value="/cart/cart.do"/>">Cart</a>
+                                                <a class="nav-link active" href="<c:url value="/cart/cart.do"/>"><i class="bi bi-cart-fill"></i>Cart</a>
                                             </li>
                                         </c:if >
                                     </c:if >
@@ -80,12 +80,12 @@
                                     <c:if test="${action=='shop' || action==null}">
                                         <c:if test="${cart==null || cart.size==0}">
                                             <li class="cart">
-                                                <a class="nav-link active" href="<c:url value="/cart/cart.do"/>">Cart</a>
+                                                <a class="nav-link active" href="<c:url value="/cart/cart.do"/>"><i class="bi bi-cart3"></i>Cart</a>
                                             </li>
                                         </c:if >
-                                        <c:if test="${cart!=null && cart.size>0}">
+                                        <c:if test="${cart!=null && cart.size!=0}">
                                             <li class="cart">
-                                                <a class="nav-link active" style="color:red" href="<c:url value="/cart/cart.do"/>">Cart</a>
+                                                <a class="nav-link active" href="<c:url value="/cart/cart.do"/>"><i class="bi bi-cart-fill"></i>Cart</a>
                                             </li>
                                         </c:if >
                                     </c:if >
@@ -111,8 +111,6 @@
                                     </button>
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="<c:url value="/shop/user.do?id=${current_user.userID}"/>">Change info</a></li>
-                                        <li><a class="dropdown-item" href="#">Order history</a></li>
-                                        <li><a class="dropdown-item" href="#">Something else here</a></li>
                                         <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item" href="<c:url value="/login/logout.do"/>">Logout</a></li>
                                     </ul>
@@ -150,7 +148,6 @@
                                     </button>
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="<c:url value="/shop/user.do?id=${current_user.userID}"/>">Change info</a></li>
-                                        <li><a class="dropdown-item" href="#">Something else here</a></li>
                                         <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item" href="<c:url value="/login/logout.do"/>">Logout</a></li>
                                     </ul>

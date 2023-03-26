@@ -41,7 +41,7 @@ public class StringUtil {
             }
             return s.toString();
         } catch (NoSuchAlgorithmException e) {
-            return null;
+            return "";
         }
     }
 

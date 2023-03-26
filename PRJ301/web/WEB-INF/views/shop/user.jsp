@@ -21,7 +21,7 @@
             Email <input class="form-control" style="margin-top:5px" id="email" type="email" value="${account.email}"></br>
             Phone <input class="form-control" style="margin-top:5px" id="phone" type="text" value="${account.phone}"></br>
             Address <input class="form-control" style="margin-top:5px" id="address" type="text" value="${account.address}"></br>
-            <div class="mt-3 d-flex justify-content-between">    
+            <div class="mt-3 d-flex justify-content-between" style="margin-bottom: 15px">    
                 <a href='<c:url value='/shop/user.do?id=${account.userID}'/>' class='btn btn-outline-warning'>Update</a>
                 <a href='<c:url value='/shop/shop.do'/>' class='btn btn-outline-danger'>Cancel</a>
             </div>
@@ -30,7 +30,26 @@
 
     </div>    
     <div class="col-8">   
-        
+        <table class="table table-striped">
+            <tr>
+                <th>No</th>
+                <th>Bill date</th>
+                <th>Product name</th>
+                <th>Price</th>
+                <th>Amount</th>  
+                <th>Total</th>
+            </tr>
+            <c:forEach var="toy" items="${list}" varStatus="loop">
+                <tr>
+                    <td>${loop.count}</td>
+                    <td>${order.billDate}</td>
+                    <td>${product.name}</td>
+                    <td>${product.price}</td>
+                    <td>${order.amount}</td>
+                    <td>$({product.price*product.sale)*0.01*amount}</td>
+                </tr>
+            </c:forEach>
+        </table>
     </div>             
 </div>
 
