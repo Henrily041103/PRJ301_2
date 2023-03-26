@@ -27,6 +27,57 @@ public class ProductDAO {
     private static final String READ = "select * from Product where ProID = ? and Stock > 0";
     private static final String DELETE = "update Product set stock = 0 where ProId = ?";
     private static final String UPDATE = "update Product set ProBrand = ?, ProType = ?, price = ?, sale = ?, stock = ?, ageGroup = ?, size = ?, color = ?, ProName = ? where ProID = ?";
+    private static final String AZ = " order by ProName ASC";
+    private static final String ZA = " order by ProName DESC";
+    private static final String INC = " order by Price ASC";
+    private static final String DEC = " order by Price DESC";
+
+    public List<ProductDTO> select(String search, int stock, String sort) throws SQLException {
+        List<ProductDTO> list;
+        Connection con = DBUtils.getConnection();
+        PreparedStatement stm = null;
+        switch (sort) {
+            case "az":
+                stm = con.prepareStatement(SELECT + AZ);
+                break;
+            case "za":
+                stm = con.prepareStatement(SELECT + ZA);
+                break;
+            case "inc":
+                stm = con.prepareStatement(SELECT +INC);
+                break;
+            case "dec":
+                stm = con.prepareStatement(SELECT + DEC);
+                break;
+        }
+        stm.setString(1, search);
+        stm.setString(2, search);
+        stm.setString(3, search);
+        stm.setInt(4, stock);
+        ResultSet rs = stm.executeQuery();
+
+        list = new ArrayList<>();
+        while (rs.next()) {
+
+            ProductDTO product = new ProductDTO();
+            product.setName(rs.getString("ProName"));
+            product.setProID(rs.getString("ProId"));
+            product.setProBrand(rs.getString("ProBrand"));
+            product.setProType(rs.getString("ProType"));
+            product.setPrice(rs.getFloat("price"));
+            product.setSale(rs.getFloat("sale"));
+            product.setStock((int) rs.getFloat("stock"));
+            product.setAgeGroup(rs.getString("ageGroup"));
+            product.setSize(rs.getString("size"));
+            product.setColor(rs.getString("color"));
+            list.add(product);
+        }
+
+        rs.close();
+        stm.close();
+        con.close();
+        return list;
+    }
 
     public List<ProductDTO> select(String search, int stock) throws SQLException {
         List<ProductDTO> list;
@@ -60,7 +111,7 @@ public class ProductDAO {
         con.close();
         return list;
     }
-
+    
     public int create(ProductDTO product) throws SQLException {
         Connection con = DBUtils.getConnection();
         PreparedStatement stm = con.prepareStatement(CREATE);
