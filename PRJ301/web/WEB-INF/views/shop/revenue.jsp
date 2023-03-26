@@ -46,12 +46,14 @@
         </div>
     </c:if>
     <br>
-    <h3 style="color:black">TOTAL OF THIS YEAR: $${q1+q2+q3}</h3>
-    <div class="progress" style="height:50px; margin-top: 5px">
-        <div class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar" style="width: ${q1/(q1+q2+q3)*100}%" aria-valuenow="${q2/(q1+q2+q3)*100}" aria-valuemin="0" aria-valuemax="${(q1+q2+q3)}">${q1}</div>
-        <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" style="width: ${q2/(q1+q2+q3)*100}%" aria-valuenow="${q2/(q1+q2+q3)*100}" aria-valuemin="0" aria-valuemax="${(q1+q2+q3)}">${q2}</div>
-        <div class="progress-bar progress-bar-striped bg-warning progress-bar-animated" role="progressbar"  style="width: ${q3/(q1+q2+q3)*100}%" aria-valuemin="${q3/(q1+q2+q3)*100}" aria-valuemax="${(q1+q2+q3)}">${q3}</div>
-    </div>
+    <c:if test="${q1+q2+q3 != 0}">
+        <h3 style="color:black">TOTAL OF THIS YEAR: $${q1+q2+q3}</h3>
+        <div class="progress" style="height:50px; margin-top: 5px">
+            <div class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar" style="width: ${q1/(q1+q2+q3)*100}%" aria-valuenow="${q2/(q1+q2+q3)*100}" aria-valuemin="0" aria-valuemax="${(q1+q2+q3)}">${q1}</div>
+            <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" style="width: ${q2/(q1+q2+q3)*100}%" aria-valuenow="${q2/(q1+q2+q3)*100}" aria-valuemin="0" aria-valuemax="${(q1+q2+q3)}">${q2}</div>
+            <div class="progress-bar progress-bar-striped bg-warning progress-bar-animated" role="progressbar"  style="width: ${q3/(q1+q2+q3)*100}%" aria-valuemin="${q3/(q1+q2+q3)*100}" aria-valuemax="${(q1+q2+q3)}">${q3}</div>
+        </div>
+    </c:if>
     <c:if test="${q1+q2+q3 == 0}">
         <h1 style="color:red; margin-bottom:100px">NOTHING THIS YEAR YET</h1>
     </c:if>

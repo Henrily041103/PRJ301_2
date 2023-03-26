@@ -177,20 +177,6 @@ public class ShopController extends HttpServlet {
         }
     }
 
-    private void user(HttpServletRequest request, HttpServletResponse response, AccountDAO dao)
-            throws SQLException, ServletException, IOException {
-        String id = request.getParameter("id");
-
-        AccountDTO account = dao.read(id);
-        if (account == null) {
-            request.setAttribute("error_message", "Something is wrong.");
-            response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
-        } else {
-            request.setAttribute("account", account);
-            request.getRequestDispatcher(MAIN).forward(request, response);
-        }
-    }
-
     private void revenue(HttpServletRequest request, HttpServletResponse response, HttpSession session, OrderDAO dao)
             throws SQLException, ServletException, IOException {
         if (session.getAttribute("brand_list") == null) {
