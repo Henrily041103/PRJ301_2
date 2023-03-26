@@ -39,7 +39,6 @@
             <div class="col-md-3 my-3">
                 <div class="container w-100" style="width: 50rem;">  
                     <div class="card-body">
-                        <form action="<c:url value="/"/>">
                             <input disabled type="text" class="form-control" placeholder="Product id" name="id" id="id" value="Product id: ${product.proID}"/>
                             <input name="id" hidden id="id" type="text" value="${product.proID}">
                             Name: <input name="name" style="margin-top:5px" id="name" type="text" value="${product.name}"></br>   
