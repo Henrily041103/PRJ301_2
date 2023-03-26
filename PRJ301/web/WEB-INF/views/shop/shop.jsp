@@ -39,7 +39,7 @@
             <div class="col-md-3 my-3">
                 <div class="container w-100" style="width: 50rem;">  
                     <div class="card-body">
-                        <form action="<c:url value="/shop/edit.do?id=${product.proID}" />">
+                        <form action="<c:url value="/shop/edit_handler.do" />">
                             <input disabled type="text" class="form-control" placeholder="Product id" name="id" id="id" value="Product id: ${product.proID}"/>
                             Name: <input style="margin-top:5px" id="name" type="text" value="${product.name}"></br>   
                             Brand: <input style="margin-top:5px" id="brand" type="text" value="${product.proBrand}"></br>
@@ -51,10 +51,20 @@
                             <c:if test="${product.size.trim()!=''}">Size: <input style="margin-top:5px" id="size" type="text" value="${product.size}"></br></c:if>   
                             Price: <input style="margin-top:5px" id="price" type="float" value="${product.price}"></br>       
                             <div class="mt-3 d-flex justify-content-between">    
-                                <button type="submit" class="btn btn-outline-success" name="id" value="${product.proID}"><i class="bi bi-check-lg"></i> Update</button>
-                                <button type="submit" class="btn btn-outline-danger" name="op" value="delete"><i class="bi bi-x-lg"></i> Delete</button>
+                                <button type="submit" class="btn btn-outline-success" name="op" value="update"><i class="bi bi-check-lg"></i> Update</button>                                
+                                <div style="display: none" class="sure-prompt" id = ${product.proID}>
+                                    <h3>Are you sure?</h3>
+                                    <button type="submit" class="btn btn-success" name="op" value="delete">Yes</button>
+                                    <button class="btn btn-danger" name="op" value="back" onclick="{
+                                            sure.style.display = 'none';
+                                            }">No</button>
+                                </div>
                             </div>
                         </form>
+                                            <button onclick="{
+                                            var sure = document.getElementById(${product.proID});
+                                            sure.style.display = 'block';
+                                        }" class="btn btn-outline-danger"><i class="bi bi-x-lg"></i> Delete</button></br>
                     </div>
                 </div>
             </div>

@@ -73,8 +73,22 @@ public class ShopController extends HttpServlet {
                 case "revenue-handler":
                     revenueHandler(request, response, odao);
                     break;
-                case "edit":
-                    edit(request, response, pdao);
+//                case "edit":
+//                    edit(request, response, pdao);
+//                    break;
+                case "edit_handler":
+                    String op = request.getParameter("op");
+                    switch (op) {
+                        case "update":
+                            edit(request, response, pdao);
+                            break;
+                        case "delete":
+                            delete(request, response, pdao);
+                            break;
+                        case "back":
+                            response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
+                            break;
+                    }
                     break;
                 case "create":
                     create(request, response, pdao);
@@ -255,7 +269,21 @@ public class ShopController extends HttpServlet {
         dao.create(newProduct);
         response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
     }
+    
+    private void delete(HttpServletRequest request, HttpServletResponse response, ProductDAO dao) throws SQLException, ServletException, IOException{
+        String id = request.getParameter("id");
 
+        ProductDTO currentProduct = dao.read(id);
+        if (currentProduct == null) {
+            request.setAttribute("error_message", "Product does not exist.");
+            request.setAttribute("controller", SHOP_CONTROLLER);
+            request.setAttribute("action", SHOP);
+            request.getRequestDispatcher(MAIN).forward(request, response);
+        } else {
+            dao.delete(id);
+            response.sendRedirect(request.getContextPath() + "/" + SHOP_CONTROLLER + "/" + SHOP + ".do");
+        }
+    }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -296,15 +324,4 @@ public class ShopController extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    public String toUTF8(String isoString) {
-        String utf8String = null;
-        try {
-            byte[] stringBytesISO = isoString.getBytes("ISO-8859-1");
-            utf8String = new String(stringBytesISO, "UTF-8");
-        } catch (Exception e) {
-            System.out.println("UnsupportedEncodingException is: " + e.getMessage());
-            utf8String = isoString;
-        }
-        return utf8String;
-    }
 }

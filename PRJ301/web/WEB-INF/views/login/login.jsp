@@ -32,8 +32,8 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <!-- Checkbox -->
                             <div class="form-group form-check">
-                                <input name="remember" value="1" type="checkbox" class="form-check-input" id="exampleCheck1">
-                                <label class="form-check-label" for="exampleCheck1">Remember me</label>
+                                <input name="remember" value="1" type="checkbox" class="form-check-input" id="exampleCheck">
+                                <label class="form-check-label" for="exampleCheck">Remember me</label>
                             </div>
                         </div>
 
