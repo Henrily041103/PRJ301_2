@@ -28,7 +28,8 @@
             </tr>
         </thead>
         <tbody>
-        <form action="<c:url value="/cart/buy_handler.do"/>">
+        <form action="<c:url value="/cart/buy_handler.do"/>">            
+            <button style="margin-right: 10px" type="submit" name="op" value="back" class="text-dark btn-outline-warning"><i class="bi bi-arrow-left">Back</i></button>
             <button type="submit" class="text-dark btn btn-danger" name="op" value="empty">
                 <i class="bi bi-trash3"></i>Empty
             </button>
@@ -67,7 +68,7 @@
                     </td>
                 </tr> 
             </c:forEach>
-            <button type="submit" class="text-dark btn btn-success" name="op" value="buy">
+            <button style = "margin-left: 10px" type="submit" class="text-dark btn btn-success" name="op" value="buy">
                 <i class="bi bi-check-lg"></i>Buy
             </button>
         </form>

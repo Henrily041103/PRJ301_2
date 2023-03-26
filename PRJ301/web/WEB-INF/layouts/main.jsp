@@ -29,8 +29,8 @@
                         <a class="navbar-brand" href="<c:url value="/shop/shop.do"/>">
                             <img src="<c:url value="/images/logo.png"/>"/></a>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            
-<!--                            IF NOT LOGGED IN-->
+
+                            <!--                            IF NOT LOGGED IN-->
                             <c:if test="${current_user==null}"> 
                                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                                     <li class="home" >
@@ -58,19 +58,20 @@
                                             <form class="d-flex" action="<c:url value="/shop/shop.do"/>">
                                                 <button class="btn btn-outline" type="submit" style="margin-right: 1px"><i class="bi bi-search"></i></button>
                                                 <input class="form-control me-2" type="text" name="search" id="search" placeholder="Search a product" value="${param.search}">
-                                                <select class="form-control" style="margin-left:10px" name="search_op" id="search_op">
-                                                    <option value="az">Name: A - Z</option>
-                                                    <option value="za">Name: Z - A</option>
-                                                    <option value="asc">Asc Price</option>
-                                                    <option value="desc">Desc Price</option>
+                                                <select class="form-control" style="margin-left:10px" name="sort" id="sort">
+                                                    <option value="none">Sort options</option>
+                                                    <option value="az" ${sort=="az"?"selected":""}>Name: A - Z</option>
+                                                    <option value="za" ${sort=="za"?"selected":""}>Name: Z - A</option>
+                                                    <option value="inc" ${sort=="inc"?"selected":""}>Increasing Price</option>
+                                                    <option value="dec" ${sort=="dec"?"selected":""}>Decreasing Price</option>
                                                 </select>                    
                                             </form>
                                         </li>
                                     </c:if>
                                 </ul>
                             </c:if >
-                            
-<!--                           IF USER IS A USER-->
+
+                            <!--                           IF USER IS A USER-->
                             <c:if test="${current_user!=null && current_user.role=='us'}">
                                 <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="font-size: 20px">
                                     <li class="home">
@@ -93,11 +94,12 @@
                                             <form class="d-flex" action="<c:url value="/shop/shop.do"/>">
                                                 <button class="btn btn-outline" type="submit" style="margin-right: 1px"><i class="bi bi-search"></i></button>
                                                 <input class="form-control me-2" type="text" name="search" id="search" placeholder="Search a product" value="${param.search}">
-                                                <select class="form-control" style="margin-left:10px" name="search_op" id="search_op">
-                                                    <option value="az">Name: A - Z</option>
-                                                    <option value="za">Name: Z - A</option>
-                                                    <option value="asc">Asc Price</option>
-                                                    <option value="desc">Desc Price</option>
+                                                <select class="form-control" style="margin-left:10px" name="sort" id="sort">
+                                                    <option value="none">Sort options</option>
+                                                    <option value="az" ${sort=="az"?"selected":""}>Name: A - Z</option>
+                                                    <option value="za" ${sort=="za"?"selected":""}>Name: Z - A</option>
+                                                    <option value="inc" ${sort=="inc"?"selected":""}>Increasing Price</option>
+                                                    <option value="dec" ${sort=="dec"?"selected":""}>Decreasing Price</option>
                                                 </select>                    
                                             </form>
                                         </li>
@@ -116,8 +118,8 @@
                                     </ul>
                                 </div>
                             </c:if >
-                            
-<!--                            IF USER IS AN ADMIN-->
+
+                            <!--                            IF USER IS AN ADMIN-->
                             <c:if test="${current_user!= null && current_user.role=='ad'}">
                                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                                     <li class="home">
@@ -128,15 +130,16 @@
                                     </li>
                                     <c:if test="${action=='shop' || action==null}">
                                         <li class="search">
-                                            <form class="d-flex" action="<c:url value="/shop/shop.do"/>">
+                                            <form class="d-flex" action="<c:url value="/shop/shop.do"/>">        
                                                 <button class="btn btn-outline" type="submit" style="margin-right: 1px"><i class="bi bi-search"></i></button>
                                                 <input class="form-control me-2" type="text" name="search" id="search" placeholder="Search a product" value="${param.search}">
-                                                <select class="form-control" style="margin-left:10px" name="search_op" id="search_op">
-                                                    <option value="az">Name: A - Z</option>
-                                                    <option value="za">Name: Z - A</option>
-                                                    <option value="asc">Asc Price</option>
-                                                    <option value="desc">Desc Price</option>
-                                                </select>                    
+                                                <select class="form-control" style="margin-left:10px" name="sort" id="sort">
+                                                    <option value="none">Sort options</option>
+                                                    <option value="az" ${sort=="az"?"selected":""}>Name: A - Z</option>
+                                                    <option value="za" ${sort=="za"?"selected":""}>Name: Z - A</option>
+                                                    <option value="inc" ${sort=="inc"?"selected":""}>Increasing Price</option>
+                                                    <option value="dec" ${sort=="dec"?"selected":""}>Decreasing Price</option>
+                                                </select>
                                             </form>
                                         </li>
                                     </c:if>
@@ -157,7 +160,7 @@
                     </div>
                 </nav>
             </div>
-                        
+
             <!--view-->
             <div class="row content">
                 <div class="col">
