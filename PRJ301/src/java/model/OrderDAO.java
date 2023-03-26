@@ -26,9 +26,9 @@ public class OrderDAO {
     
     private static final String SELECT = "select * from tblOrder";
     private static final String READ = "select * from tblOrder where OrderID = ?";
-    private static final String INSERT = "INSERT INTO BabyStore.dbo.tblOrder(OrderID, UserID, ProID, Amount, BillDate) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    private static final String DELETE = "DELETE FROM BabyStore.dbo.tblOrder WHERE OrderID = ?";
-    private static final String UPDATE = "UPDATE BabyStore.dbo.tblOrder SET UserID=?, ProID=?, Amount=?, BillDate=? WHERE OrderID = ?";
+    private static final String INSERT = "INSERT INTO bbs.dbo.tblOrder(OrderID, UserID, ProID, Amount, BillDate) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private static final String DELETE = "DELETE FROM bbs.dbo.tblOrder WHERE OrderID = ?";
+    private static final String UPDATE = "UPDATE bbs.dbo.tblOrder SET UserID=?, ProID=?, Amount=?, BillDate=? WHERE OrderID = ?";
     
     
     public List<OrderDTO> select() throws SQLException {

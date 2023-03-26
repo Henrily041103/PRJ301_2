@@ -101,8 +101,7 @@
                 <label for="size" class="form-label">Color</label>
                 <input disabled type="text" class="form-control" placeholder="Product color" name="color" value="${product.color}">
             </div>
-            <a class="btn btn-outline-danger" href="<c:url value="/shop/shop.do"/>">Home</a>
-            <button href="shop/shop.do" class="btn btn-outline-danger" name="op" value="cancel">Return</button>
+            <a class="btn btn-outline-danger" href="<c:url value="/shop/shop.do"/>">Return</a>
         </div>
         <div class="col">
             <img src="https://arc-anglerfish-arc2-prod-bostonglobe.s3.amazonaws.com/public/OHGTW7AZXYI6THMOPZS6ZC3G2A.jpg" class="img-fluid">
